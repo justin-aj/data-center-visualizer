@@ -11,8 +11,8 @@ The output is the interactive 3D scene itself, not a report.
 Built with Kiro Spec-driven development (requirements first):
 
 - [Requirements](.kiro/specs/data-center-visualizer/requirements.md): approved
-- [Design](.kiro/specs/data-center-visualizer/design.md): reviewed by GPT-5.6 Sol as advisor, awaiting human approval
-- [Tasks](.kiro/specs/data-center-visualizer/tasks.md): two parallel lanes
+- [Design](.kiro/specs/data-center-visualizer/design.md): approved, after review by GPT-5.6 Sol as advisor
+- [Tasks](.kiro/specs/data-center-visualizer/tasks.md): approved for implementation, in two parallel lanes
 
 No runnable app exists yet.
 
