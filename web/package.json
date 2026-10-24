@@ -9,7 +9,7 @@
     "prebuild": "node scripts/sync-data.mjs",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "eslint . && prettier --check .",
+    "lint": "eslint . && prettier --check .prettierrc package.json tsconfig.json index.html '*.ts' '*.js' 'scripts/**/*.mjs' 'src/**/*.ts' 'tests/**/*.ts' 'e2e/**/*.ts'",
     "test": "vitest run",
     "pretest:e2e": "npm run build",
     "test:e2e": "playwright test"
