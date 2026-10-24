@@ -7,12 +7,15 @@ import { renderComparison } from './compare/renderer';
 import { loadPackage } from './data/loader';
 import { CONTEXT_LOSS_MESSAGE, watchContextLoss } from './export/context-loss';
 import { downloadBlob, overlayLines, renderPng } from './export/png';
+import { createInventoryTable } from './inventory/table';
 import { buildContextLayers, FLAT_GROUND_NOTE } from './scene/context';
 import { buildProposalFeatures } from './scene/proposal';
 import { createRenderCore } from './scene/renderer';
 import { changeMode, defaultAppState, type ComparisonMode } from './state';
 import { createApproximateBanner } from './ui/banner';
 import { createCategoryControls } from './ui/categories';
+import { bindSceneKeyboard } from './ui/keyboard';
+import { installAppLayout } from './ui/layout';
 
 export const APP_TITLE = 'Data Center Visualizer';
 
@@ -25,9 +28,12 @@ export function mount(root: HTMLElement): void {
 }
 
 export async function startApp(root: HTMLElement): Promise<void> {
+  installAppLayout();
   document.body.style.cssText = 'margin:0;font-family:system-ui,sans-serif';
-  root.style.cssText = 'height:100vh;display:grid;grid-template-rows:auto 1fr';
+  root.style.cssText =
+    'height:100vh;display:grid;grid-template-rows:auto 1fr auto';
   const header = document.createElement('header');
+  header.className = 'app-header';
   header.style.cssText = 'padding:.6rem 1rem;background:#f7f3ea;color:#1e2a31';
   const title = document.createElement('h1');
   title.textContent = APP_TITLE;
@@ -37,7 +43,9 @@ export async function startApp(root: HTMLElement): Promise<void> {
   status.setAttribute('aria-live', 'polite');
   status.textContent = 'Loading manifest…';
   const controls = document.createElement('div');
+  controls.className = 'app-controls';
   const sceneHost = document.createElement('section');
+  sceneHost.className = 'scene-shell';
   sceneHost.setAttribute('aria-label', '3D comparison');
   sceneHost.style.cssText = 'position:relative;min-height:0';
   header.append(title, status, controls);
@@ -145,6 +153,53 @@ export async function startApp(root: HTMLElement): Promise<void> {
     status.textContent = message;
   });
   status.dataset['contextLossMessage'] = CONTEXT_LOSS_MESSAGE;
+
+  const inventoryWrap = document.createElement('section');
+  inventoryWrap.className = 'inventory-wrap';
+  inventoryWrap.tabIndex = 0;
+  inventoryWrap.setAttribute('aria-label', 'Scene inventory');
+  inventoryWrap.append(createInventoryTable(loaded.proposal, loaded.manifest));
+  root.append(inventoryWrap);
+
+  let viewpointIndex = 0;
+  bindSceneKeyboard({
+    orbit: (horizontal, vertical) => {
+      core.camera.position.x += horizontal * 8;
+      core.camera.position.y = Math.max(
+        2,
+        core.camera.position.y - vertical * 8,
+      );
+      core.controls.update();
+      draw();
+    },
+    zoom: (direction) => {
+      const factor = direction > 0 ? 1.12 : 0.88;
+      core.camera.position
+        .sub(core.controls.target)
+        .multiplyScalar(factor)
+        .add(core.controls.target);
+      core.controls.update();
+      draw();
+    },
+    nextViewpoint: () => {
+      viewpointIndex = (viewpointIndex + 1) % loaded.manifest.viewpoints.length;
+      const viewpoint = loaded.manifest.viewpoints[viewpointIndex];
+      if (viewpoint)
+        void moveToViewpoint(core.camera, viewpoint, [], {
+          reducedMotion: true,
+        }).then(draw);
+    },
+    previousViewpoint: () => {
+      viewpointIndex =
+        (viewpointIndex - 1 + loaded.manifest.viewpoints.length) %
+        loaded.manifest.viewpoints.length;
+      const viewpoint = loaded.manifest.viewpoints[viewpointIndex];
+      if (viewpoint)
+        void moveToViewpoint(core.camera, viewpoint, [], {
+          reducedMotion: true,
+        }).then(draw);
+    },
+  });
   draw();
 }
 

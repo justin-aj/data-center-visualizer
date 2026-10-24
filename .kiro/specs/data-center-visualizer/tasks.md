@@ -279,7 +279,7 @@ How to use this file:
   - Files: `web/src/export/**`, `web/e2e/export.spec.ts`
   - Done when: an e2e test on the production build downloads a PNG whose overlay text matches the app state, and a simulated context loss shows the retry message.
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
-- [ ] 9.2 Accessible inventory and keyboard path
+- [x] 9.2 Accessible inventory and keyboard path
   - Inventory table, the keyboard bindings in design section 7, focus styles, live region, and the 320 px layout.
   - Depends on: 7.5, 8.5
   - Files: `web/src/inventory/**`, `web/src/ui/layout.ts`, `web/src/ui/keyboard.ts`, `web/e2e/a11y.spec.ts`
