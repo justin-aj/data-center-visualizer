@@ -42,7 +42,7 @@ How to use this file:
   - _Requirements: 1.4_
 
 - [ ] 2. Pipeline foundation
-- [ ] 2.1 Scaffold the Python pipeline
+- [x] 2.1 Scaffold the Python pipeline
   - `uv` project pinned to Python 3.12 (`.python-version`, `requires-python = ">=3.12,<3.13"`) with the dependencies in design section 5. `dcviz` CLI entry point with stub subcommands, `ruff` config, and a `pytest` smoke test.
   - Depends on: none
   - Files: `pipeline/pyproject.toml`, `pipeline/uv.lock`, `pipeline/.python-version`, `pipeline/src/dcviz_pipeline/__init__.py`, `pipeline/src/dcviz_pipeline/cli.py`, `pipeline/tests/test_smoke.py`

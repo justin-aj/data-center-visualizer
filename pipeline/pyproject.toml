@@ -1,0 +1,43 @@
+[project]
+name = "dcviz-pipeline"
+version = "0.1.0"
+description = "Data pipeline for versioned Data Center Visualizer proposal packages"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "geopandas>=1.0",
+    "jsonschema>=4.23",
+    "numpy>=2.0",
+    "pdfplumber>=0.11",
+    "pyproj>=3.6",
+    "pyyaml>=6.0",
+    "requests>=2.32",
+    "shapely>=2.0",
+]
+
+[project.scripts]
+dcviz = "dcviz_pipeline.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.112",
+    "pytest>=8.3",
+    "ruff>=0.6",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dcviz_pipeline"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-config --strict-markers"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
