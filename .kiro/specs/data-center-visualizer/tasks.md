@@ -233,7 +233,7 @@ How to use this file:
   - Files: `web/src/ui/categories.ts`
   - Done when: each checkbox shows and hides only its own category.
   - _Requirements: 4.5, 9.2_
-- [ ] 7.6 Scene property tests
+- [x] 7.6 Scene property tests
   - fast-check: membership sets satisfy invariant 4 for generated packages; no feature id renders twice; a mode change leaves the camera, date, and time identical.
   - Depends on: 7.4
   - Files: `web/tests/compare/properties.test.ts`, `web/docs/property-test-findings.md`
