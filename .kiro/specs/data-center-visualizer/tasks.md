@@ -209,7 +209,7 @@ How to use this file:
   - Files: `web/src/scene/builders.ts`, `web/tests/scene/builders.test.ts`
   - Done when: the tests pass and the fixture renders in fewer than 50 draw calls.
   - _Requirements: 3.1, 3.10, 11.4_
-- [ ] 7.2 Context layers
+- [x] 7.2 Context layers
   - Buildings, roads, rail, water, and open space in the reference style. Legend note for the flat ground.
   - Depends on: 7.1
   - Files: `web/src/scene/context.ts`
