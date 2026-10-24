@@ -1,0 +1,23 @@
+{
+  "schemaVersion":"1.0.0",
+  "projectId":"synthetic-invalid-rmse",
+  "packageVersion":"1.0.0",
+  "title":"Invalid synthetic high-RMSE manifest",
+  "siteAddress":"Synthetic test site",
+  "baselineDate":"2024-01-15",
+  "proposalDate":"2024-06-20",
+  "verifiedAt":"2025-02-10",
+  "proposalVersionLabel":"Synthetic invalid fixture",
+  "origin":{"lon":-71.316,"lat":42.64,"epsg":26986,"easting":210000,"northing":915000,"proj4":"+proj=lcc +datum=NAD83 +units=m"},
+  "datum":{"kind":"flat","siteGradeNavd88M":null,"note":"Synthetic."},
+  "contextRadiusM":1200,
+  "georeference":{"sourceSheet":"src-synthetic-plan:S-100","planUnits":"m","planScale":"1:500","method":"similarity-least-squares","parameters":{"scale":1,"rotationDeg":0,"translateE":210000,"translateN":915000},"controlPoints":[{"id":"check-1","role":"check","planX":0,"planY":0,"easting":210000,"northing":915000,"description":"Synthetic check point","residualM":3.1},{"id":"check-2","role":"check","planX":100,"planY":100,"easting":210100,"northing":915100,"description":"Synthetic check point","residualM":3.3}],"rmseM":3.2,"checkPointCount":2,"approximate":false,"verticalDatum":null,"reviewedBy":"Synthetic reviewer","reviewedAt":"2025-02-10"},
+  "sources":[{"id":"src-synthetic-plan","title":"Synthetic Plan","issuer":"Fixture generator","date":"2024-06-20","sheetOrPage":"S-100","url":"https://example.invalid/plan","retrievedAt":"2025-02-01","license":"CC0 synthetic fixture","distributable":true}],
+  "claims":[],
+  "viewpoints":[{"id":"view-1","label":"Synthetic view","kind":"aerial","position":[0,0,100],"target":[0,0,0],"publicAccess":false}],
+  "publicViewingAreas":["roads"],
+  "reviewIssues":[],
+  "review":{"reviewer":"Synthetic reviewer","date":"2025-02-10","result":"invalid_fixture","checklistRef":"synthetic-checklist"},
+  "attribution":["Synthetic fixture"],
+  "excludedFields":["owner"]
+}

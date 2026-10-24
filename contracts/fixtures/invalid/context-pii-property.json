@@ -1,0 +1,16 @@
+{
+  "ground":{"elevationM":null},
+  "buildings":[{
+    "id":"invalid-context-building-pii",
+    "geometry":{"type":"Polygon","coordinates":[[[0,0],[10,0],[10,10],[0,10],[0,0]]]},
+    "baseElevationM":0,
+    "heightM":7,
+    "heightStatus":"estimated",
+    "heightSource":"Synthetic estimate",
+    "owner":"Prohibited synthetic owner field"
+  }],
+  "roads":[],
+  "railways":[],
+  "water":[],
+  "openSpace":[]
+}

@@ -1,0 +1,15 @@
+{
+  "features":[{
+    "id":"invalid-prohibited-category",
+    "category":"noise",
+    "state":"proposed",
+    "replaces":[],
+    "label":"Invalid prohibited synthetic category",
+    "geometry":{"type":"Polygon","coordinates":[[[0,0],[10,0],[10,10],[0,10],[0,0]]]},
+    "widthM":null,
+    "baseElevationM":0,
+    "height":{"valueM":5,"status":"estimated","method":"Synthetic estimate","sourceRefs":["src-synthetic-plan"]},
+    "confidence":{"position":{"status":"derived","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."},"footprint":{"status":"official","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."}},
+    "notes":"Must fail because noise is not a proposal category."
+  }]
+}

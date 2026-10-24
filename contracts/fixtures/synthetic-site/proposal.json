@@ -1,0 +1,180 @@
+{
+  "features": [
+    {
+      "id": "building-existing",
+      "category": "building",
+      "state": "existing",
+      "replaces": [],
+      "label": "Existing synthetic operations building",
+      "geometry": {"type": "Polygon", "coordinates": [[[-80, -20], [-30, -20], [-30, 20], [-80, 20], [-80, -20]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 12, "status": "official", "method": "Synthetic plan dimension", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan coordinate."},
+        "footprint": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan dimensions."}
+      },
+      "notes": "Retained in both scenes."
+    },
+    {
+      "id": "generator-removed",
+      "category": "generator",
+      "state": "removed",
+      "replaces": [],
+      "label": "Removed synthetic generator",
+      "geometry": {"type": "Polygon", "coordinates": [[[-15, -42], [-5, -42], [-5, -28], [-15, -28], [-15, -42]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 4, "status": "derived", "method": "Derived from synthetic elevations", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan footprint."}
+      },
+      "notes": "Present only in the current scene."
+    },
+    {
+      "id": "generator-proposed-replacement",
+      "category": "generator",
+      "state": "proposed",
+      "replaces": ["generator-removed"],
+      "label": "Proposed replacement synthetic generator",
+      "geometry": {"type": "Polygon", "coordinates": [[[-13, -40], [1, -40], [1, -24], [-13, -24], [-13, -40]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 4.5, "status": "estimated", "method": "Synthetic equipment-class estimate", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "estimated", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic estimate for test coverage."}
+      },
+      "notes": "Replaces generator-removed in the proposed scene."
+    },
+    {
+      "id": "cooling-proposed",
+      "category": "cooling",
+      "state": "proposed",
+      "replaces": [],
+      "label": "Proposed synthetic cooling equipment",
+      "geometry": {"type": "Polygon", "coordinates": [[[20, -35], [45, -35], [45, -10], [20, -10], [20, -35]]]},
+      "widthM": null,
+      "baseElevationM": 8,
+      "height": {"valueM": 6, "status": "estimated", "method": "Synthetic test estimate", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan footprint."}
+      },
+      "notes": "Roof-mounted test feature."
+    },
+    {
+      "id": "electrical-proposed",
+      "category": "electrical",
+      "state": "proposed",
+      "replaces": [],
+      "label": "Proposed synthetic electrical yard",
+      "geometry": {"type": "Polygon", "coordinates": [[[55, -15], [90, -15], [90, 20], [55, 20], [55, -15]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 7, "status": "official", "method": "Synthetic plan dimension", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic coordinate schedule."},
+        "footprint": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan footprint."}
+      },
+      "notes": "No real infrastructure is represented."
+    },
+    {
+      "id": "retaining-wall-proposed",
+      "category": "retaining_wall",
+      "state": "proposed",
+      "replaces": [],
+      "label": "Proposed synthetic retaining wall",
+      "geometry": {"type": "LineString", "coordinates": [[-95, 55], [-30, 65], [25, 62]]},
+      "widthM": 0.45,
+      "baseElevationM": 0,
+      "height": {"valueM": 2.4, "status": "derived", "method": "Derived from synthetic top and bottom elevations", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Line and width derived from synthetic plan."}
+      },
+      "notes": "Line feature with explicit width."
+    },
+    {
+      "id": "fence-existing",
+      "category": "fence",
+      "state": "existing",
+      "replaces": [],
+      "label": "Existing synthetic perimeter fence",
+      "geometry": {"type": "LineString", "coordinates": [[-105, -70], [105, -70], [110, 75]]},
+      "widthM": 0.1,
+      "baseElevationM": 0,
+      "height": {"valueM": 2.1, "status": "estimated", "method": "Synthetic fence-class estimate", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "estimated", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic estimate for test coverage."},
+        "footprint": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Line derived from synthetic plan."}
+      },
+      "notes": "Retained in both scenes."
+    },
+    {
+      "id": "paving-proposed",
+      "category": "paving",
+      "state": "proposed",
+      "replaces": [],
+      "label": "Proposed synthetic service paving",
+      "geometry": {"type": "Polygon", "coordinates": [[[-25, -65], [100, -65], [100, -48], [-25, -48], [-25, -65]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": null, "status": "unknown", "method": null, "sourceRefs": []},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "official", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic plan boundary."}
+      },
+      "notes": "Height does not apply and is represented as unknown."
+    },
+    {
+      "id": "vegetation-screen-existing",
+      "category": "vegetation_screen",
+      "state": "existing",
+      "replaces": [],
+      "label": "Existing synthetic vegetation screen",
+      "geometry": {"type": "Polygon", "coordinates": [[[-105, 30], [-92, 30], [-92, 105], [-105, 105], [-105, 30]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 3, "status": "estimated", "method": "Synthetic vegetation-class estimate", "sourceRefs": ["src-synthetic-context"]},
+      "confidence": {
+        "position": {"status": "estimated", "sourceRefs": ["src-synthetic-context"], "note": "Synthetic context estimate."},
+        "footprint": {"status": "estimated", "sourceRefs": ["src-synthetic-context"], "note": "Synthetic context estimate."}
+      },
+      "notes": "Superseded by the modified screen."
+    },
+    {
+      "id": "vegetation-screen-modified",
+      "category": "vegetation_screen",
+      "state": "modified",
+      "replaces": ["vegetation-screen-existing"],
+      "label": "Modified synthetic vegetation screen",
+      "geometry": {"type": "Polygon", "coordinates": [[[-108, 28], [-90, 28], [-90, 110], [-108, 110], [-108, 28]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": null, "status": "unknown", "method": null, "sourceRefs": []},
+      "confidence": {
+        "position": {"status": "derived", "sourceRefs": ["src-synthetic-plan"], "note": "Derived by synthetic georeference."},
+        "footprint": {"status": "unknown", "sourceRefs": [], "note": "Final planting spread is intentionally unknown."}
+      },
+      "notes": "Exercises modified state and unknown confidence."
+    },
+    {
+      "id": "other-proposed",
+      "category": "other",
+      "state": "proposed",
+      "replaces": [],
+      "label": "Proposed synthetic utility enclosure",
+      "geometry": {"type": "Polygon", "coordinates": [[[25, 35], [40, 35], [40, 48], [25, 48], [25, 35]]]},
+      "widthM": null,
+      "baseElevationM": 0,
+      "height": {"valueM": 3.2, "status": "estimated", "method": "Synthetic enclosure estimate", "sourceRefs": ["src-synthetic-plan"]},
+      "confidence": {
+        "position": {"status": "unknown", "sourceRefs": [], "note": "Exact synthetic location intentionally unresolved."},
+        "footprint": {"status": "estimated", "sourceRefs": ["src-synthetic-plan"], "note": "Synthetic estimate for test coverage."}
+      },
+      "notes": "Generic category coverage without a real-world referent."
+    }
+  ]
+}

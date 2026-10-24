@@ -1,0 +1,15 @@
+{
+  "features":[{
+    "id":"invalid-wall-polygon",
+    "category":"retaining_wall",
+    "state":"proposed",
+    "replaces":[],
+    "label":"Invalid synthetic wall represented as polygon",
+    "geometry":{"type":"Polygon","coordinates":[[[0,0],[10,0],[10,2],[0,2],[0,0]]]},
+    "widthM":0.4,
+    "baseElevationM":0,
+    "height":{"valueM":2,"status":"official","method":"Synthetic dimension","sourceRefs":["src-synthetic-plan"]},
+    "confidence":{"position":{"status":"derived","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."},"footprint":{"status":"official","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."}},
+    "notes":"Must fail because retaining walls require LineString geometry."
+  }]
+}

@@ -1,0 +1,40 @@
+{
+  "ground": {"elevationM": null},
+  "buildings": [
+    {"id":"context-building-01","geometry":{"type":"Polygon","coordinates":[[[-420,-180],[-390,-180],[-390,-150],[-420,-150],[-420,-180]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-02","geometry":{"type":"Polygon","coordinates":[[[-350,-170],[-325,-170],[-325,-130],[-350,-130],[-350,-170]]]},"baseElevationM":0,"heightM":9,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-03","geometry":{"type":"Polygon","coordinates":[[[-280,-210],[-245,-210],[-245,-180],[-280,-180],[-280,-210]]]},"baseElevationM":0,"heightM":8,"heightStatus":"estimated","heightSource":"Synthetic level count"},
+    {"id":"context-building-04","geometry":{"type":"Polygon","coordinates":[[[-205,-190],[-170,-190],[-170,-145],[-205,-145],[-205,-190]]]},"baseElevationM":0,"heightM":11,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-05","geometry":{"type":"Polygon","coordinates":[[[-130,-220],[-90,-220],[-90,-185],[-130,-185],[-130,-220]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-06","geometry":{"type":"Polygon","coordinates":[[[130,-210],[165,-210],[165,-175],[130,-175],[130,-210]]]},"baseElevationM":0,"heightM":10,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-07","geometry":{"type":"Polygon","coordinates":[[[205,-195],[235,-195],[235,-155],[205,-155],[205,-195]]]},"baseElevationM":0,"heightM":6,"heightStatus":"estimated","heightSource":"Synthetic level count"},
+    {"id":"context-building-08","geometry":{"type":"Polygon","coordinates":[[[275,-225],[320,-225],[320,-185],[275,-185],[275,-225]]]},"baseElevationM":0,"heightM":12,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-09","geometry":{"type":"Polygon","coordinates":[[[350,-180],[385,-180],[385,-145],[350,-145],[350,-180]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-10","geometry":{"type":"Polygon","coordinates":[[[420,-205],[455,-205],[455,-165],[420,-165],[420,-205]]]},"baseElevationM":0,"heightM":9,"heightStatus":"estimated","heightSource":"Synthetic level count"},
+    {"id":"context-building-11","geometry":{"type":"Polygon","coordinates":[[[-440,180],[-405,180],[-405,215],[-440,215],[-440,180]]]},"baseElevationM":0,"heightM":8,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-12","geometry":{"type":"Polygon","coordinates":[[[-365,150],[-330,150],[-330,195],[-365,195],[-365,150]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-13","geometry":{"type":"Polygon","coordinates":[[[-285,190],[-250,190],[-250,225],[-285,225],[-285,190]]]},"baseElevationM":0,"heightM":15,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-14","geometry":{"type":"Polygon","coordinates":[[[-205,155],[-165,155],[-165,195],[-205,195],[-205,155]]]},"baseElevationM":0,"heightM":6,"heightStatus":"estimated","heightSource":"Synthetic level count"},
+    {"id":"context-building-15","geometry":{"type":"Polygon","coordinates":[[[-135,205],[-100,205],[-100,245],[-135,245],[-135,205]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-16","geometry":{"type":"Polygon","coordinates":[[[145,180],[180,180],[180,215],[145,215],[145,180]]]},"baseElevationM":0,"heightM":10,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-17","geometry":{"type":"Polygon","coordinates":[[[220,155],[260,155],[260,195],[220,195],[220,155]]]},"baseElevationM":0,"heightM":9,"heightStatus":"estimated","heightSource":"Synthetic level count"},
+    {"id":"context-building-18","geometry":{"type":"Polygon","coordinates":[[[300,205],[340,205],[340,245],[300,245],[300,205]]]},"baseElevationM":0,"heightM":13,"heightStatus":"derived","heightSource":"Synthetic explicit height"},
+    {"id":"context-building-19","geometry":{"type":"Polygon","coordinates":[[[375,160],[410,160],[410,200],[375,200],[375,160]]]},"baseElevationM":0,"heightM":7,"heightStatus":"estimated","heightSource":"Synthetic footprint-area class"},
+    {"id":"context-building-20","geometry":{"type":"Polygon","coordinates":[[[445,195],[480,195],[480,230],[445,230],[445,195]]]},"baseElevationM":0,"heightM":6,"heightStatus":"estimated","heightSource":"Synthetic level count"}
+  ],
+  "roads": [
+    {"geometry":{"type":"LineString","coordinates":[[-600,-100],[-250,-90],[0,-95],[260,-85],[600,-100]]},"class":"synthetic-collector","widthM":12},
+    {"geometry":{"type":"LineString","coordinates":[[-40,-600],[-35,-250],[-30,0],[-25,300],[-20,600]]},"class":"synthetic-local","widthM":8},
+    {"geometry":{"type":"LineString","coordinates":[[-600,320],[-200,310],[200,325],[600,315]]},"class":"synthetic-path","widthM":3}
+  ],
+  "railways": [
+    {"geometry":{"type":"LineString","coordinates":[[-650,-360],[-200,-340],[250,-355],[650,-345]]},"widthM":4}
+  ],
+  "water": [
+    {"geometry":{"type":"Polygon","coordinates":[[[280,360],[430,350],[470,440],[400,510],[275,470],[280,360]]]},"name":"Synthetic Pond"}
+  ],
+  "openSpace": [
+    {"geometry":{"type":"Polygon","coordinates":[[[-520,280],[-260,280],[-260,500],[-520,500],[-520,280]]]},"kind":"park","publicAccess":true},
+    {"geometry":{"type":"Polygon","coordinates":[[[500,-20],[650,-20],[650,180],[500,180],[500,-20]]]},"kind":"wooded","publicAccess":false}
+  ]
+}

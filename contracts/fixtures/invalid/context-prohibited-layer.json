@@ -1,0 +1,9 @@
+{
+  "ground":{"elevationM":null},
+  "buildings":[],
+  "roads":[],
+  "railways":[],
+  "water":[],
+  "openSpace":[],
+  "noise":[]
+}

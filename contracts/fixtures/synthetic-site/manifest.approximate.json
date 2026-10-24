@@ -1,0 +1,144 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectId": "synthetic-civic-site",
+  "packageVersion": "1.0.0-approximate",
+  "title": "Synthetic Civic Site Visualization, Approximate Georeference Variant",
+  "siteAddress": "Synthetic test site; no real-world address",
+  "baselineDate": "2024-01-15",
+  "proposalDate": "2024-06-20",
+  "verifiedAt": "2025-02-10",
+  "proposalVersionLabel": "Synthetic test plan set, approximate georeference variant",
+  "origin": {
+    "lon": -71.316,
+    "lat": 42.64,
+    "epsg": 26986,
+    "easting": 210000,
+    "northing": 915000,
+    "proj4": "+proj=lcc +lat_0=41 +lon_0=-71.5 +lat_1=41.7166666666667 +lat_2=42.6833333333333 +x_0=200000 +y_0=750000 +datum=NAD83 +units=m +no_defs"
+  },
+  "datum": {
+    "kind": "flat",
+    "siteGradeNavd88M": null,
+    "note": "Synthetic flat datum; no surveyed elevation is asserted."
+  },
+  "contextRadiusM": 1200,
+  "georeference": {
+    "sourceSheet": "src-synthetic-plan:S-100",
+    "planUnits": "m",
+    "planScale": "1:500",
+    "method": "similarity-least-squares",
+    "parameters": {
+      "scale": 1.001,
+      "rotationDeg": 0.6,
+      "translateE": 210001.2,
+      "translateN": 914998.7
+    },
+    "controlPoints": [
+      {
+        "id": "cp-1",
+        "role": "control",
+        "planX": 0,
+        "planY": 0,
+        "easting": 210000,
+        "northing": 915000,
+        "description": "Synthetic southwest grid intersection",
+        "residualM": 1.4
+      },
+      {
+        "id": "cp-2",
+        "role": "control",
+        "planX": 100,
+        "planY": 0,
+        "easting": 210099.998,
+        "northing": 915000.698,
+        "description": "Synthetic southeast grid intersection",
+        "residualM": 1.7
+      },
+      {
+        "id": "check-1",
+        "role": "check",
+        "planX": 0,
+        "planY": 100,
+        "easting": 209999.302,
+        "northing": 915099.998,
+        "description": "Synthetic northwest check point",
+        "residualM": 3.2
+      }
+    ],
+    "rmseM": 3.2,
+    "checkPointCount": 1,
+    "approximate": true,
+    "verticalDatum": null,
+    "reviewedBy": "Synthetic fixture reviewer",
+    "reviewedAt": "2025-02-10"
+  },
+  "sources": [
+    {
+      "id": "src-synthetic-plan",
+      "title": "Synthetic Site Plan",
+      "issuer": "Data Center Visualizer fixture authors",
+      "date": "2024-06-20",
+      "sheetOrPage": "S-100 through S-103",
+      "url": "https://example.invalid/synthetic/site-plan",
+      "retrievedAt": "2025-02-01",
+      "license": "Project-owned synthetic fixture; no third-party license",
+      "distributable": true
+    },
+    {
+      "id": "src-synthetic-context",
+      "title": "Synthetic Neighborhood Context",
+      "issuer": "Data Center Visualizer fixture authors",
+      "date": "2024-01-15",
+      "sheetOrPage": "dataset",
+      "url": "https://example.invalid/synthetic/context",
+      "retrievedAt": "2025-02-01",
+      "license": "Project-owned synthetic fixture; no third-party license",
+      "distributable": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim-purpose",
+      "kind": "estimate",
+      "text": "All dimensions and features in this package are synthetic test data.",
+      "sourceRefs": ["src-synthetic-plan"]
+    }
+  ],
+  "viewpoints": [
+    {
+      "id": "view-aerial",
+      "label": "Synthetic aerial overview",
+      "kind": "aerial",
+      "position": [180, -220, 190],
+      "target": [20, 30, 0],
+      "publicAccess": false
+    },
+    {
+      "id": "view-park",
+      "label": "Synthetic public park view",
+      "kind": "ground",
+      "position": [-150, 80, 1.7],
+      "target": [20, 35, 12],
+      "publicAccess": true
+    }
+  ],
+  "publicViewingAreas": ["roads", "openSpace"],
+  "reviewIssues": [
+    {
+      "id": "review-approximate-georeference",
+      "severity": "warning",
+      "description": "The synthetic georeference is approximate because RMSE exceeds two metres and only one check point is present.",
+      "featureIds": []
+    }
+  ],
+  "review": {
+    "reviewer": "Synthetic fixture reviewer",
+    "date": "2025-02-10",
+    "result": "approved_as_approximate_fixture",
+    "checklistRef": "synthetic-checklist-v1"
+  },
+  "attribution": [
+    "Synthetic fixture created for Data Center Visualizer contract testing; no third-party content."
+  ],
+  "excludedFields": ["owner", "own_name", "abutter", "phone", "email"]
+}

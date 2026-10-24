@@ -1,0 +1,15 @@
+{
+  "features":[{
+    "id":"invalid-unknown-height-with-value",
+    "category":"building",
+    "state":"proposed",
+    "replaces":[],
+    "label":"Invalid synthetic unknown height with numeric value",
+    "geometry":{"type":"Polygon","coordinates":[[[0,0],[10,0],[10,10],[0,10],[0,0]]]},
+    "widthM":null,
+    "baseElevationM":0,
+    "height":{"valueM":5,"status":"unknown","method":null,"sourceRefs":[]},
+    "confidence":{"position":{"status":"derived","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."},"footprint":{"status":"official","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."}},
+    "notes":"Must fail because unknown height requires a null value."
+  }]
+}

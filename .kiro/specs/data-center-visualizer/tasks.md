@@ -27,7 +27,7 @@ How to use this file:
   - Files: `contracts/*.schema.json`, `contracts/README.md`, `contracts/CHANGELOG.md`
   - Done when: both schemas pass the draft 2020-12 meta-schema check, and `CHANGELOG.md` has a dated `1.0.0` entry.
   - _Requirements: 1.1, 1.2, 1.4, 2.2, 3.2, 8.1, 8.6_
-- [ ] 1.2 Create the synthetic fixture
+- [x] 1.2 Create the synthetic fixture
   - Hand-write `contracts/fixtures/synthetic-site/` with every case listed in design section 4.6. Add `contracts/fixtures/invalid/` with one file per rule the schema should reject.
   - Depends on: 1.1
   - Files: `contracts/fixtures/**`

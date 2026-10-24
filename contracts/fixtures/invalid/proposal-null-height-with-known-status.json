@@ -1,0 +1,15 @@
+{
+  "features":[{
+    "id":"invalid-null-height-with-known-status",
+    "category":"building",
+    "state":"proposed",
+    "replaces":[],
+    "label":"Invalid synthetic null height with estimated status",
+    "geometry":{"type":"Polygon","coordinates":[[[0,0],[10,0],[10,10],[0,10],[0,0]]]},
+    "widthM":null,
+    "baseElevationM":0,
+    "height":{"valueM":null,"status":"estimated","method":"Synthetic estimate","sourceRefs":["src-synthetic-plan"]},
+    "confidence":{"position":{"status":"derived","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."},"footprint":{"status":"official","sourceRefs":["src-synthetic-plan"],"note":"Synthetic."}},
+    "notes":"Must fail because a null height requires unknown status."
+  }]
+}
