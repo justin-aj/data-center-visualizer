@@ -70,7 +70,7 @@ How to use this file:
   - Files: `pipeline/src/dcviz_pipeline/context/buildings.py`, `pipeline/tests/context/test_buildings.py`
   - Done when: the footprint count and bounding box are reported, and the tests pass on a small clipped sample.
   - _Requirements: 1.6, 3.7, 3.10, 12.6_
-- [ ] 3.2 Building heights
+- [x] 3.2 Building heights
   - Measure OSM and Overture height coverage for the 1.2 km area. Implement the priority chain from design section 5.2. Record coverage per `heightSource` in `pipeline/docs/height-sources.md`.
   - `[human]` Confirm the height approach and its license before 3.6 publishes.
   - Depends on: 3.1
