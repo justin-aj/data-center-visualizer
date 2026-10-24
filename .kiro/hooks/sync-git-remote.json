@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Sync Git remote",
+      "trigger": "Stop",
+      "description": "After each agent turn, synchronize a clean checked-out branch with its configured upstream without creating merges or rewriting history.",
+      "action": {
+        "type": "command",
+        "command": "set -e; git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0; branch=\"$(git branch --show-current)\"; if [ -z \"$branch\" ]; then echo \"Git sync skipped: detached HEAD\" >&2; exit 1; fi; if [ -n \"$(git status --porcelain)\" ]; then echo \"Git sync skipped: working tree has uncommitted changes\" >&2; exit 1; fi; git pull --ff-only && git push",
+        "timeout": 120
+      }
+    }
+  ]
+}
