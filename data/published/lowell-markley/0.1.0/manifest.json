@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "1.1.0",
+  "packageKind": "context-only",
+  "projectId": "lowell-markley",
+  "packageVersion": "0.1.0",
+  "title": "Lowell Markley Area Context",
+  "siteAddress": "2 Prince Avenue / 1 Markley Way, Lowell, Massachusetts",
+  "baselineDate": "2026-10-24",
+  "proposalDate": "2024-08-09",
+  "verifiedAt": "2026-10-24",
+  "proposalVersionLabel": "Context-only neighborhood package; August 9, 2024 proposal geometry and georeference are not included",
+  "origin": {
+    "lon": -71.304229,
+    "lat": 42.6305082,
+    "epsg": 26986,
+    "easting": 216058.54350012477,
+    "northing": 931122.2000483305,
+    "proj4": "+proj=lcc +lat_0=41 +lon_0=-71.5 +lat_1=41.7166666666667 +lat_2=42.6833333333333 +x_0=200000 +y_0=750000 +datum=NAD83 +units=m +no_defs"
+  },
+  "datum": {
+    "kind": "flat",
+    "siteGradeNavd88M": null,
+    "note": "Ground is shown as a flat visualization plane; terrain and site grade are unknown."
+  },
+  "contextRadiusM": 1200.0,
+  "sources": [
+    {
+      "id": "massgis-buildings-lowell-160",
+      "title": "MassGIS Building Structures (2-D), Lowell town ID 160",
+      "issuer": "Bureau of Geographic Information (MassGIS), Commonwealth of Massachusetts EOTSS",
+      "date": "2026-05-22",
+      "sheetOrPage": "Lowell town ID 160 archive; layer updated May 22, 2026",
+      "url": "https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/shapefiles/structures/structures_poly_160.zip",
+      "retrievedAt": "2026-10-24",
+      "license": "MassGIS public records; free redistribution and derivative use with requested source credit",
+      "distributable": true
+    },
+    {
+      "id": "osm-building-heights-pilot",
+      "title": "OpenStreetMap buildings with height or building:levels tags near the Lowell pilot",
+      "issuer": "OpenStreetMap contributors",
+      "date": "2026-10-24",
+      "sheetOrPage": "Overpass snapshot at OSM base timestamp 2026-10-24T21:32:51Z",
+      "url": "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28way%5B%22building%22%5D%5B%22height%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Brelation%5B%22building%22%5D%5B%22height%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Bway%5B%22building%22%5D%5B%22building%3Alevels%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Brelation%5B%22building%22%5D%5B%22building%3Alevels%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3B%29%3Bout+tags+geom%3B",
+      "retrievedAt": "2026-10-24",
+      "license": "Open Data Commons Open Database License 1.0; OpenStreetMap attribution and share-alike terms apply",
+      "distributable": true
+    },
+    {
+      "id": "massgis-roads-pilot",
+      "title": "MassGIS-MassDOT Roads clipped to the Lowell pilot envelope",
+      "issuer": "Massachusetts Department of Transportation and MassGIS",
+      "date": "2026-10-24",
+      "sheetOrPage": "Bounded ArcGIS REST query snapshot; source vintages vary",
+      "url": "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MassDOTRoads_gdb/FeatureServer/0/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CSTREETNAME%2CCLASS%2CRDTYPE%2CADMIN_TYPE%2CRT_NUMBER%2CSTREET_NAME%2CF_CLASS%2CNUM_LANES%2CROW_WIDTH&returnGeometry=true&outSR=26986&f=json",
+      "retrievedAt": "2026-10-24",
+      "license": "MassGIS public records; free redistribution and derivative use with requested source credit",
+      "distributable": true
+    },
+    {
+      "id": "massgis-rail-pilot",
+      "title": "MassGIS Trains layer clipped to the Lowell pilot envelope",
+      "issuer": "Central Transportation Planning Staff and MassGIS",
+      "date": "2014-07-15",
+      "sheetOrPage": "TRAINS_ARC; source metadata states current through July 15, 2014",
+      "url": "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Trains_gdb/FeatureServer/0/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CTYPE%2CCOMMRAIL%2COWNERSHIP%2CFREIGHT_OP%2CPASS_OP%2CTRACK%2CYARD%2CRAIL_TRL%2CSPUR&returnGeometry=true&outSR=26986&f=json",
+      "retrievedAt": "2026-10-24",
+      "license": "MassGIS public records; free redistribution and derivative use with requested source credit",
+      "distributable": true
+    },
+    {
+      "id": "massgis-water-polygons-pilot",
+      "title": "MassGIS USGS/MassDEP Hydrography water bodies clipped to the Lowell pilot envelope",
+      "issuer": "USGS, MassDEP, and MassGIS",
+      "date": "2026-10-24",
+      "sheetOrPage": "Bounded MassDEP Hydrography ArcGIS REST query snapshot",
+      "url": "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Massachusetts_Water_Features/FeatureServer/8/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CNAME%2CPOLY_CODE%2CSOURCE%2CRESOLUTION&returnGeometry=true&outSR=26986&f=json",
+      "retrievedAt": "2026-10-24",
+      "license": "MassGIS public records; free redistribution and derivative use with requested source credit",
+      "distributable": true
+    },
+    {
+      "id": "massgis-open-space-pilot",
+      "title": "MassGIS Protected and Recreational Open Space clipped to the Lowell pilot envelope",
+      "issuer": "Massachusetts Executive Office of Energy and Environmental Affairs and MassGIS",
+      "date": "2026-10-24",
+      "sheetOrPage": "Bounded Lowell town ID 160 ArcGIS REST query snapshot",
+      "url": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/openspace/FeatureServer/0/query?where=TOWN_ID%3D160&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CTOWN_ID%2CPOLY_ID%2CSITE_NAME%2CPRIM_PURP%2CPUB_ACCESS%2CLEV_PROT%2CALT_SITE_NAME%2CFORMAL_SITE_NAME%2COS_TYPE&returnGeometry=true&outSR=26986&f=json",
+      "retrievedAt": "2026-10-24",
+      "license": "MassGIS public records; free redistribution and derivative use with requested source credit",
+      "distributable": true
+    }
+  ],
+  "claims": [
+    {
+      "id": "context-building-height-estimates",
+      "kind": "estimate",
+      "text": "Context building heights use sparse OpenStreetMap level counts and documented footprint-area visual-massing defaults; none are official heights.",
+      "sourceRefs": [
+        "massgis-buildings-lowell-160",
+        "osm-building-heights-pilot"
+      ]
+    },
+    {
+      "id": "context-line-width-estimates",
+      "kind": "estimate",
+      "text": "Road and railway widths are visualization conventions, not surveyed or official physical widths.",
+      "sourceRefs": [
+        "massgis-roads-pilot",
+        "massgis-rail-pilot"
+      ]
+    }
+  ],
+  "viewpoints": [
+    {
+      "id": "aerial-overview",
+      "label": "Lowell neighborhood overview",
+      "kind": "aerial",
+      "position": [
+        650.0,
+        -750.0,
+        550.0
+      ],
+      "target": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "publicAccess": false
+    },
+    {
+      "id": "ground-olivera-park",
+      "label": "Olivera Park public view",
+      "kind": "ground",
+      "position": [
+        -96.0,
+        78.6,
+        1.6
+      ],
+      "target": [
+        0.0,
+        0.0,
+        20.0
+      ],
+      "publicAccess": true
+    },
+    {
+      "id": "ground-father-kirwin-park",
+      "label": "Father Kirwin Park public view",
+      "kind": "ground",
+      "position": [
+        404.3,
+        -123.6,
+        1.6
+      ],
+      "target": [
+        0.0,
+        0.0,
+        20.0
+      ],
+      "publicAccess": true
+    },
+    {
+      "id": "ground-concord-river-greenway",
+      "label": "Concord River Greenway public view",
+      "kind": "ground",
+      "position": [
+        555.3,
+        -82.3,
+        1.6
+      ],
+      "target": [
+        0.0,
+        0.0,
+        20.0
+      ],
+      "publicAccess": true
+    }
+  ],
+  "publicViewingAreas": [
+    "roads",
+    "openSpace"
+  ],
+  "reviewIssues": [
+    {
+      "id": "context-only-no-proposal-georeference",
+      "severity": "information",
+      "description": "This package contains neighborhood context only. It contains no proposal features or proposal-plan georeference.",
+      "featureIds": []
+    },
+    {
+      "id": "context-mixed-source-vintages",
+      "severity": "limitation",
+      "description": "Context layers have different source vintages. The baseline date records package verification, not a claim that every feature was observed that day.",
+      "featureIds": []
+    }
+  ],
+  "review": {
+    "reviewer": "Ajin Frank Justin",
+    "date": "2026-10-24",
+    "result": "approved_context_only_publication",
+    "checklistRef": "data/sources.yaml and pipeline/docs/height-sources.md"
+  },
+  "attribution": [
+    "Bureau of Geographic Information (MassGIS), Commonwealth of Massachusetts, Executive Office of Technology Services and Security",
+    "Road data: Massachusetts Department of Transportation and MassGIS",
+    "Rail data: Central Transportation Planning Staff and MassGIS",
+    "Hydrography: USGS, MassDEP, and MassGIS",
+    "Open space: Massachusetts Executive Office of Energy and Environmental Affairs and MassGIS",
+    "© OpenStreetMap contributors; Open Database License 1.0: https://www.openstreetmap.org/copyright"
+  ],
+  "excludedFields": [
+    "owner",
+    "ownership",
+    "own_name",
+    "owner_address",
+    "assessor",
+    "site_address",
+    "abutter",
+    "phone",
+    "email"
+  ]
+}

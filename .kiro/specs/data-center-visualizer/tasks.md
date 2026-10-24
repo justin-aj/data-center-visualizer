@@ -63,7 +63,7 @@ How to use this file:
   - Done when: the tests pass.
   - _Requirements: 2.1, 2.5_
 
-- [ ] 3. Lowell neighborhood context (handoff H2)
+- [x] 3. Lowell neighborhood context (handoff H2)
 - [x] 3.1 Context buildings
   - Load MassGIS building footprints for Lowell (verify the town ID), clip to 1200 m around the origin, simplify (0.3 m), and drop footprints under 8 m². Keep only an id and the geometry.
   - Depends on: 2.2, 2.3
@@ -95,7 +95,7 @@ How to use this file:
   - Files: `pipeline/tests/context/test_properties.py`, `pipeline/docs/property-test-findings.md`
   - Done when: the tests pass, and any defect they found that the example tests missed is recorded.
   - _Requirements: 1.6, 3.6_
-- [ ] 3.6 Publish context-only package `lowell-markley/0.1.0`
+- [x] 3.6 Publish context-only package `lowell-markley/0.1.0`
   - Manifest with origin, datum, sources, attribution, three curated viewpoints (`pipeline/curation/lowell-markley/viewpoints.yaml`), and an empty `proposal.json` features list.
   - `[human]` Review the source licenses and approve publication.
   - Depends on: 1.3, 3.4

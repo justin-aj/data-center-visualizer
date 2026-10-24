@@ -1,0 +1,37 @@
+# Curated from public-access MassGIS open-space polygons, not from imagery.
+# Positions and targets use the package's local east/north/up frame in metres.
+
+viewpoints:
+  - id: aerial-overview
+    label: Lowell neighborhood overview
+    kind: aerial
+    position: [650.0, -750.0, 550.0]
+    target: [0.0, 0.0, 0.0]
+    publicAccess: false
+
+  - id: ground-olivera-park
+    label: Olivera Park public view
+    kind: ground
+    position: [-96.0, 78.6, 1.6]
+    target: [0.0, 0.0, 20.0]
+    publicAccess: true
+
+  - id: ground-father-kirwin-park
+    label: Father Kirwin Park public view
+    kind: ground
+    position: [404.3, -123.6, 1.6]
+    target: [0.0, 0.0, 20.0]
+    publicAccess: true
+
+  - id: ground-concord-river-greenway
+    label: Concord River Greenway public view
+    kind: ground
+    position: [555.3, -82.3, 1.6]
+    target: [0.0, 0.0, 20.0]
+    publicAccess: true
+
+review:
+  reviewer: Ajin Frank Justin
+  date: 2026-10-24
+  result: approved_context_only_publication
+  note: Positions are inside public-access open-space polygons and outside modeled building footprints.
