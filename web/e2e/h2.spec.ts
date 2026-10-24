@@ -18,6 +18,16 @@ test('loads the Lowell H2 context-only demo', async ({ page }) => {
   await expect(inventory).toContainText('3319');
   await expect(inventory).toContainText('786');
   await expect(page.locator('canvas')).toBeVisible();
+  await expect(page.locator('[data-testid="site-note"]')).toContainText(
+    'existing building at the Markley site',
+  );
+  await expect(page.locator('[data-testid="site-note"]')).toContainText(
+    'Proposed changes are not shown.',
+  );
+  await page.getByRole('button', { name: 'Focus on site' }).click();
+  await expect(
+    page.getByText('Focused on the existing Markley site building.'),
+  ).toBeVisible();
 });
 
 test('exports truthful Lowell context-only wording', async ({ page }) => {

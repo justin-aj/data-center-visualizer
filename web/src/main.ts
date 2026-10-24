@@ -22,6 +22,11 @@ import {
 import { buildContextLayers, FLAT_GROUND_NOTE } from './scene/context';
 import { buildProposalFeatures } from './scene/proposal';
 import { createRenderCore } from './scene/renderer';
+import {
+  buildSiteHighlight,
+  findSiteBuilding,
+  withoutBuilding,
+} from './scene/site';
 import { changeMode, defaultAppState, type ComparisonMode } from './state';
 import { createApproximateBanner } from './ui/banner';
 import { createCategoryControls } from './ui/categories';
@@ -120,13 +125,18 @@ export async function startApp(root: HTMLElement): Promise<void> {
   const core = createRenderCore(sceneHost);
   const oldGround = core.scene.getObjectByName('Flat demonstration ground');
   if (oldGround) oldGround.visible = false;
+  const siteBuilding = findSiteBuilding(loaded.context);
+  const site = siteBuilding ? buildSiteHighlight(siteBuilding) : null;
   const context = buildContextLayers(
-    loaded.context,
+    siteBuilding
+      ? withoutBuilding(loaded.context, siteBuilding.id)
+      : loaded.context,
     loaded.manifest.contextRadiusM,
   );
   const proposal = buildProposalFeatures(loaded.proposal, 'full');
   applyComparisonLayers(proposal.group, proposalMembership(loaded.proposal));
   core.scene.add(context.group, proposal.group);
+  if (site) core.scene.add(site.group);
   core.controls.maxDistance = loaded.manifest.contextRadiusM * 2;
   const firstViewpoint = loaded.manifest.viewpoints[0];
   if (!firstViewpoint) throw new Error('The package has no viewpoint.');
@@ -213,6 +223,36 @@ export async function startApp(root: HTMLElement): Promise<void> {
     }
   }
   controls.append(exportButton, exportSummary);
+  if (site) {
+    const focusButton = document.createElement('button');
+    focusButton.type = 'button';
+    focusButton.textContent = 'Focus on site';
+    focusButton.addEventListener('click', () => {
+      void moveToViewpoint(
+        core.camera,
+        {
+          id: 'site-focus',
+          label: 'Markley site close-up',
+          kind: 'aerial',
+          position: [170, -210, 130],
+          target: [0, 0, 0],
+          publicAccess: false,
+        },
+        [],
+      ).then(() => {
+        core.controls.target.set(0, 0, 0);
+        core.controls.update();
+        draw();
+        status.textContent = 'Focused on the existing Markley site building.';
+      });
+    });
+    controls.prepend(focusButton);
+    const siteNote = document.createElement('p');
+    siteNote.dataset['testid'] = 'site-note';
+    siteNote.textContent = site.description;
+    siteNote.style.margin = '0';
+    header.append(siteNote);
+  }
   watchContextLoss(core.renderer.domElement, (message) => {
     status.textContent = message;
   });
