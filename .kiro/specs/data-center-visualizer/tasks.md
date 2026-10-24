@@ -215,7 +215,7 @@ How to use this file:
   - Files: `web/src/scene/context.ts`
   - Done when: every fixture layer renders. Prepare a screenshot for the person to review.
   - _Requirements: 3.7, 3.8, 3.11_
-- [ ] 7.3 Proposal features with confidence treatments
+- [x] 7.3 Proposal features with confidence treatments
   - Every treatment in the design section 6.3 table, for both detail levels, plus the approximate-placement banner.
   - Depends on: 7.1
   - Files: `web/src/scene/proposal.ts`, `web/src/scene/textures.ts`, `web/src/ui/banner.ts`
