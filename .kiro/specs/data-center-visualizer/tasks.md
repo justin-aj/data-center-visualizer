@@ -273,7 +273,7 @@ How to use this file:
   - _Requirements: 8.1, 8.2, 8.3, 8.5_
 
 - [ ] 9. Output, accessibility, and resilience
-- [ ] 9.1 PNG export
+- [x] 9.1 PNG export
   - Implement design section 6.6. Video and animation export are out of scope for this task.
   - Depends on: 7.4, 8.1
   - Files: `web/src/export/**`, `web/e2e/export.spec.ts`
