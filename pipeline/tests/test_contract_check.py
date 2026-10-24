@@ -23,8 +23,10 @@ def test_repository_contract_fixtures_pass() -> None:
 
     assert result == 0
     report = output.getvalue()
-    assert "4 valid fixtures, 10 invalid fixtures" in report
+    assert "6 valid fixtures, 15 invalid fixtures" in report
     assert "PASS fixture manifest.approximate.json" in report
+    assert "PASS fixture manifest.proposal-v1.1.json" in report
+    assert "PASS fixture manifest.context-only.json" in report
 
 
 def test_checker_requires_invalid_fixtures_to_fail(tmp_path: Path) -> None:
@@ -37,6 +39,34 @@ def test_checker_requires_invalid_fixtures_to_fail(tmp_path: Path) -> None:
 
     assert result == 1
     assert "expected schema rejection, but the document passed" in output.getvalue()
+
+
+def test_checker_validates_published_context_only_triplet(tmp_path: Path) -> None:
+    _copy_contracts(tmp_path)
+    source = tmp_path / "contracts/fixtures/synthetic-site"
+    package = tmp_path / "data/published/synthetic-civic-site/1.1.0-context-only"
+    package.mkdir(parents=True)
+    shutil.copy(source / "manifest.context-only.json", package / "manifest.json")
+    shutil.copy(source / "context.json", package / "context.json")
+    (package / "proposal.json").write_text('{"features": []}\n', encoding="utf-8")
+    output = StringIO()
+
+    result = run_contract_check(tmp_path, output)
+
+    assert result == 0
+    report = output.getvalue()
+    assert (
+        "PASS published package "
+        "data/published/synthetic-civic-site/1.1.0-context-only/manifest.json"
+    ) in report
+    assert (
+        "PASS published package "
+        "data/published/synthetic-civic-site/1.1.0-context-only/proposal.json"
+    ) in report
+    assert (
+        "PASS published package "
+        "data/published/synthetic-civic-site/1.1.0-context-only/context.json"
+    ) in report
 
 
 def test_checker_validates_published_packages_and_reports_fields(tmp_path: Path) -> None:

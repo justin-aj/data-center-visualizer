@@ -158,6 +158,8 @@ def run_contract_check(repo_root: Path | None = None, stream: TextIO | None = No
     valid_targets = (
         (fixture_dir / "manifest.json", validators["manifest"]),
         (fixture_dir / "manifest.approximate.json", validators["manifest"]),
+        (fixture_dir / "manifest.proposal-v1.1.json", validators["manifest"]),
+        (fixture_dir / "manifest.context-only.json", validators["manifest"]),
         (fixture_dir / "proposal.json", validators["proposal"]),
         (fixture_dir / "context.json", validators["context"]),
     )

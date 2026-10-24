@@ -1,6 +1,6 @@
 # Data Center Visualizer contracts
 
-Contract version `1.0.0` defines the three JSON documents in each published proposal package:
+Contract versions `1.0.0` and `1.1.0` define the three JSON documents in each published package:
 
 - `manifest.json` and `proposal.json` validate against `proposal-package.schema.json`. The schema root accepts either document; named definitions are available at `#/$defs/manifest` and `#/$defs/proposal`.
 - `context.json` validates against `context-scene.schema.json`.
@@ -18,9 +18,15 @@ data/published/<projectId>/<packageVersion>/
 
 Published package directories are immutable. Any change to a published value requires a new semantic package version.
 
+## Package kinds
+
+Version 1.1.0 adds the optional manifest field `packageKind`. Its accepted values are `proposal` and `context-only`. An omitted `packageKind` has proposal semantics, so both an explicit `proposal` package and a package with no kind must include `georeference`. A `context-only` package must omit `georeference`; it does not weaken or bypass the georeferencing requirement for proposal data.
+
+Version 1.0.0 manifests remain fully compatible. They must include `georeference` and must not include `packageKind`. The package layout is unchanged for every version and kind: `manifest.json`, `proposal.json`, and `context.json` are all required. A context-only package uses a valid empty proposal document (`{"features": []}`) when it has no proposal features.
+
 ## Contract guarantees
 
-The schemas require the metadata, provenance, georeferencing, confidence, geometry, and review fields specified by the approved design. Proposal heights enforce this invariant: an unknown height has a null value, and only an unknown height may have a null value.
+The schemas require the metadata, provenance, applicable georeferencing, confidence, geometry, and review fields specified by the approved design. Proposal heights enforce this invariant: an unknown height has a null value, and only an unknown height may have a null value.
 
 The proposal category enum is limited to physical site features. The context schema is limited to buildings, roads, railways, water, and open space. Neither schema defines noise, air-dispersion, emissions, health, legal-compliance, or utility-capacity layers.
 

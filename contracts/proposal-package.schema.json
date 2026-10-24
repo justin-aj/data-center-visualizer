@@ -269,7 +269,6 @@
         "origin",
         "datum",
         "contextRadiusM",
-        "georeference",
         "sources",
         "claims",
         "viewpoints",
@@ -282,7 +281,10 @@
       "properties": {
         "schemaVersion": {
           "type": "string",
-          "pattern": "^1\\.0\\.0$"
+          "enum": ["1.0.0", "1.1.0"]
+        },
+        "packageKind": {
+          "enum": ["context-only", "proposal"]
         },
         "projectId": {
           "type": "string",
@@ -337,7 +339,36 @@
           "items": { "$ref": "#/$defs/nonEmptyString" },
           "uniqueItems": true
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["schemaVersion"],
+            "properties": { "schemaVersion": { "const": "1.0.0" } }
+          },
+          "then": {
+            "required": ["georeference"],
+            "properties": {
+              "georeference": {},
+              "packageKind": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["schemaVersion", "packageKind"],
+            "properties": {
+              "schemaVersion": { "const": "1.1.0" },
+              "packageKind": { "const": "context-only" }
+            }
+          },
+          "then": { "properties": { "georeference": false } },
+          "else": {
+            "required": ["georeference"],
+            "properties": { "georeference": {} }
+          }
+        }
+      ]
     },
     "height": {
       "type": "object",
