@@ -110,7 +110,7 @@ How to use this file:
   - _Requirements: 3.3, 3.4_
 
 - [ ] 4. Proposal georeferencing and curation
-- [ ] 4.1 Proposal-version research
+- [x] 4.1 Proposal-version research
   - `[human]` Determine whether the August 2024 SPR plan set matches the April–July 2025 MassDEP application and approval NE-25-002. Decide which records belong to the `lowell-markley` 2024 package. Record findings and sources in `pipeline/docs/proposal-versions.md`.
   - Depends on: 2.2
   - Files: `pipeline/docs/proposal-versions.md`
