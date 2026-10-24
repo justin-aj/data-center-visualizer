@@ -83,7 +83,7 @@ How to use this file:
   - Files: `pipeline/src/dcviz_pipeline/context/layers.py`, `pipeline/tests/context/test_layers.py`
   - Done when: every layer is non-empty for Lowell, and River Meadow Brook, Oliveira Park, and the rail corridor are present (by name or location).
   - _Requirements: 3.7, 5.2_
-- [ ] 3.4 Context writer
+- [x] 3.4 Context writer
   - `dcviz context` assembles 3.1–3.3 on the flat datum (design section 3) into `pipeline/build/context.json`, validates it, and reports its size (target under 6 MB).
   - Depends on: 3.2, 3.3
   - Files: `pipeline/src/dcviz_pipeline/context/__init__.py`, `pipeline/src/dcviz_pipeline/cli.py`

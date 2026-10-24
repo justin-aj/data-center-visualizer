@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from collections.abc import Sequence
 
+from dcviz_pipeline.context import run_context
 from dcviz_pipeline.contract_check import run_contract_check
 from dcviz_pipeline.fetch import run_fetch
 
@@ -35,6 +36,11 @@ def _run_fetch(_args: argparse.Namespace) -> int:
     return run_fetch()
 
 
+def _run_context(_args: argparse.Namespace) -> int:
+    """Build the Lowell context scene from cached public source data."""
+    return run_context()
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the top-level command parser and its stub subcommands."""
     parser = argparse.ArgumentParser(
@@ -46,6 +52,7 @@ def build_parser() -> argparse.ArgumentParser:
     handlers = {
         "contract-check": _run_contract_check,
         "fetch": _run_fetch,
+        "context": _run_context,
     }
     for command in COMMANDS:
         subparser = subparsers.add_parser(command)
