@@ -187,7 +187,7 @@ How to use this file:
   - Files: `web/src/scene/renderer.ts`, `web/src/scene/style.ts`, `web/src/camera/orbit.ts`, `web/tests/scene/style.test.ts`
   - Done when: the demo looks like an elevated city-model overview (prepare a screenshot for the person to compare with the reference style), and the style-token contrast tests pass.
   - _Requirements: 3.8, 3.9, 9.7_
-- [ ] 6.3 Package loader with validation
+- [x] 6.3 Package loader with validation
   - Fetch the manifest, proposal, and context. Validate them with ajv against `contracts/*.schema.json` (imported at build time). Expose typed models and loading-progress events. Tests validate the synthetic fixture, reject every file in `contracts/fixtures/invalid/`, and validate every package under `data/published/`.
   - Depends on: 1.3, 6.1
   - Files: `web/src/data/loader.ts`, `web/src/data/types.ts`, `web/tests/data/loader.test.ts`
