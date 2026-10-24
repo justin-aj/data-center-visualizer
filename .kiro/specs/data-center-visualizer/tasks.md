@@ -201,7 +201,7 @@ How to use this file:
   - Done when: the tests pass.
   - _Requirements: 2.1, 5.3_
 
-- [ ] 7. Scene building and comparison
+- [x] 7. Scene building and comparison
 - [x] 7.1 Geometry builders
   - Extrude polygons, and lines with `widthM`. Merge context buildings without changing any vertex height, and store a per-vertex `featureId`. Instance repeated equipment.
   - fast-check: extruded volume equals footprint area × height within 0.1 %; merged geometry preserves each building's height exactly.
@@ -227,7 +227,7 @@ How to use this file:
   - Files: `web/src/compare/**`, `web/src/state.ts`
   - Done when: the 7.6 tests pass and memory use in split mode stays within 10 % of single mode.
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.6_
-- [ ] 7.5 Category visibility controls
+- [x] 7.5 Category visibility controls
   - Native checkbox group per category, announced in the live region.
   - Depends on: 7.4
   - Files: `web/src/ui/categories.ts`
