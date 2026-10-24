@@ -253,7 +253,7 @@ How to use this file:
   - Files: `web/src/camera/place.ts`, `web/tests/camera/place.test.ts`
   - Done when: tests cover valid, private, out-of-radius, and inside-footprint points.
   - _Requirements: 5.2_
-- [ ] 8.3 Address lookup adapter
+- [x] 8.3 Address lookup adapter
   - Geocoder interface with a `none` provider (the default) and a mock for tests. Do not add a real provider.
   - Depends on: 6.4
   - Files: `web/src/lookup/**`, `web/tests/lookup/*.test.ts`
