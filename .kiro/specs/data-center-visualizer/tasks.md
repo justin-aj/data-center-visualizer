@@ -77,7 +77,7 @@ How to use this file:
   - Files: `pipeline/src/dcviz_pipeline/context/heights.py`, `pipeline/docs/height-sources.md`, `pipeline/tests/context/test_heights.py`
   - Done when: every building has `heightM`, `heightStatus`, and `heightSource`, and the coverage numbers are recorded.
   - _Requirements: 3.3, 3.4, 3.11_
-- [ ] 3.3 Roads, rail, water, and open space
+- [x] 3.3 Roads, rail, water, and open space
   - Clip each layer to the radius. Assign road widths by class. Set `publicAccess` on open space.
   - Depends on: 2.2, 2.3
   - Files: `pipeline/src/dcviz_pipeline/context/layers.py`, `pipeline/tests/context/test_layers.py`
