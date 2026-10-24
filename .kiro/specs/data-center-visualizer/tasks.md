@@ -181,7 +181,7 @@ How to use this file:
   - Files: `web/package.json`, `web/package-lock.json`, `web/vite.config.ts`, `web/tsconfig.json`, `web/index.html`, `web/src/main.ts`, `web/eslint.config.js`, `web/.prettierrc`, `web/playwright.config.ts`, `web/scripts/sync-data.mjs`, `web/tests/smoke.test.ts`, `web/e2e/smoke.spec.ts`
   - Done when: `npm ci`, `npm run lint`, `npm test`, `npm run build`, and the smoke e2e test pass.
   - _Requirements: 11.5_
-- [ ] 6.2 Render core with the stylized look
+- [x] 6.2 Render core with the stylized look
   - Renderer, lights, ground plane, anti-aliasing, the style tokens from design section 6.3, and orbit controls with tilt, pan, zoom, a minimum height, and a minimum distance. Demonstrate them on procedural boxes until real data arrives.
   - Depends on: 6.1
   - Files: `web/src/scene/renderer.ts`, `web/src/scene/style.ts`, `web/src/camera/orbit.ts`, `web/tests/scene/style.test.ts`
