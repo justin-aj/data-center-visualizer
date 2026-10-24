@@ -259,7 +259,7 @@ How to use this file:
   - Files: `web/src/lookup/**`, `web/tests/lookup/*.test.ts`
   - Done when: with `none` the UI explains that lookup is unavailable and viewpoints still work; with the mock a result places the camera; the query never reaches state, the URL, or an export.
   - _Requirements: 5.3, 5.4, 5.5, 10.3_
-- [ ] 8.4 Sun position and shadows
+- [x] 8.4 Sun position and shadows
   - Convert the selected Lowell wall-clock time with `America/New_York` rules, then run suncalc. Shadows from site features and nearby context. Estimated-shadow labeling, no shadow for unknown heights, and an explanation when shadows are disabled.
   - Depends on: 7.3
   - Files: `web/src/sun/**`, `web/tests/sun/*.test.ts`
