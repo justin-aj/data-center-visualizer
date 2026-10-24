@@ -55,7 +55,7 @@ How to use this file:
   - Files: `data/sources.yaml`, `pipeline/src/dcviz_pipeline/fetch.py`, `pipeline/tests/test_fetch.py`
   - Done when: a clean `dcviz fetch` downloads every reachable source, and the tests (mocked HTTP) pass.
   - _Requirements: 1.5, 8.2, 8.3_
-- [ ] 2.3 Coordinate utilities and package I/O
+- [x] 2.3 Coordinate utilities and package I/O
   - EPSG:26986 ↔ local frame (design section 3), 0.1 m rounding, and reading and writing package files with schema validation.
   - Hypothesis property tests: State Plane ↔ local round trip within 1 mm; rounding moves no point more than 0.05 m.
   - Depends on: 1.1, 2.1
