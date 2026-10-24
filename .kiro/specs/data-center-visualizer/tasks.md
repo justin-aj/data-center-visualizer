@@ -247,7 +247,7 @@ How to use this file:
   - Files: `web/src/camera/viewpoints.ts`, `web/tests/camera/viewpoints.test.ts`
   - Done when: every viewpoint loads at its position and target, and no camera state can be below ground or inside a footprint (unit test).
   - _Requirements: 5.1, 5.6, 9.4_
-- [ ] 8.2 Place a viewpoint on public ground
+- [x] 8.2 Place a viewpoint on public ground
   - The user can place a ground viewpoint only on the layers listed in `manifest.publicViewingAreas` (road corridors and open space with `publicAccess: true`), inside the radius, and outside every footprint. Other points get an explanation.
   - Depends on: 8.1
   - Files: `web/src/camera/place.ts`, `web/tests/camera/place.test.ts`
