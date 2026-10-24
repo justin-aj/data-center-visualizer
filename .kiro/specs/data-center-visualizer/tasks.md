@@ -18,7 +18,7 @@ How to use this file:
 
 ## Lane A: Data pipeline
 
-- [ ] 1. Shared contracts (handoff H1)
+- [x] 1. Shared contracts (handoff H1)
 - [x] 1.1 Write the JSON Schemas
   - Create `proposal-package.schema.json` (manifest and proposal) and `context-scene.schema.json` exactly as specified in design sections 4.2–4.4. Use JSON Schema draft 2020-12.
   - Encode invariant 1 (unknown height ⇔ null value) in the schema.
@@ -33,7 +33,7 @@ How to use this file:
   - Files: `contracts/fixtures/**`
   - Done when: the valid fixture passes and every invalid fixture fails, as shown by 1.3.
   - _Requirements: 1.4, 1.5, 3.5, 4.4_
-- [ ] 1.3 Contract check and shared check script
+- [x] 1.3 Contract check and shared check script
   - Add `dcviz contract-check`, using the `jsonschema` version locked in `pipeline/uv.lock`. It validates `contracts/fixtures/synthetic-site/`, expects every file in `contracts/fixtures/invalid/` to fail, and validates every `data/published/**` package.
   - Add `scripts/check-all.sh`. It runs the contract check and Lane A's `ruff` and `pytest` when `uv` is installed, and runs Lane B's `npm run lint` and `npm test` when `web/node_modules` exists. It prints which parts ran. It exits non-zero if any check fails or if no contract validation ran at all.
   - Depends on: 1.2, 2.1
