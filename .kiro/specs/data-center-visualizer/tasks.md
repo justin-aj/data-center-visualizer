@@ -202,7 +202,7 @@ How to use this file:
   - _Requirements: 2.1, 5.3_
 
 - [ ] 7. Scene building and comparison
-- [ ] 7.1 Geometry builders
+- [x] 7.1 Geometry builders
   - Extrude polygons, and lines with `widthM`. Merge context buildings without changing any vertex height, and store a per-vertex `featureId`. Instance repeated equipment.
   - fast-check: extruded volume equals footprint area × height within 0.1 %; merged geometry preserves each building's height exactly.
   - Depends on: 6.2, 6.4
