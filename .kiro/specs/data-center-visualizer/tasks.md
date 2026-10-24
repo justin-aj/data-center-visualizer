@@ -292,7 +292,7 @@ How to use this file:
   - Files: `web/src/ui/status.ts`, `web/src/ui/fallback.ts`, `web/public/fallback/synthetic-site.png`, `web/e2e/fallbacks.spec.ts`
   - Done when: e2e covers each failure by blocking requests or disabling WebGL.
   - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
-- [ ] 9.4 Reduced detail and performance trace
+- [x] 9.4 Reduced detail and performance trace
   - Detail toggle that keeps outlines and markers, plus a load-time and FPS trace for the acceptance tests.
   - Depends on: 7.4
   - Files: `web/src/perf/**`
