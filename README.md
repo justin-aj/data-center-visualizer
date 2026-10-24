@@ -37,8 +37,8 @@ The two lanes share one contract in `contracts/`, so each can work without waiti
 ### Start developing
 
 ```bash
-git clone https://github.com/justin-aj/lotlens.git
-cd lotlens
+git clone https://github.com/justin-aj/data-center-visualizer.git
+cd data-center-visualizer
 kiro-cli
 ```
 

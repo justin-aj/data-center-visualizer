@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="How Data Center Visualizer turns public development records into verified, versioned 3D scene packages."
+    />
+    <title>How It Works · Data Center Visualizer</title>
+    <style>
+      :root {
+        --ink: #1e2a31;
+        --muted: #5b6a73;
+        --accent: #f07a3f;
+        --accent-ink: #b4532a;
+        --paper: #f7f3ea;
+        --card: #ffffff;
+        --line: #e4dccd;
+        --navy: #14232d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.55;
+      }
+      a {
+        color: var(--accent-ink);
+      }
+      a:focus-visible {
+        outline: 3px solid #174f78;
+        outline-offset: 3px;
+      }
+      header.hero {
+        background: linear-gradient(120deg, var(--navy), #1f3a4a 60%, #3b3a46);
+        color: #fff;
+        padding: 3rem 1rem 3.5rem;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+      }
+      .nav strong {
+        font-size: 1.05rem;
+      }
+      .btn {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+      }
+      .btn:hover {
+        background: #d4622b;
+      }
+      .btn.ghost {
+        background: transparent;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) inset;
+      }
+      .kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #f5c7a9;
+        margin: 0 0 0.6rem;
+      }
+      h1 {
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+        max-width: 18ch;
+      }
+      .lede {
+        font-size: 1.1rem;
+        max-width: 62ch;
+        color: #dfe8ee;
+        margin: 0 0 1.5rem;
+      }
+      section {
+        padding: 3rem 0 0;
+      }
+      h2 {
+        font-size: 1.6rem;
+        letter-spacing: -0.01em;
+        margin: 0 0 0.4rem;
+      }
+      .section-lede {
+        color: var(--muted);
+        max-width: 66ch;
+        margin: 0 0 1.5rem;
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.8rem;
+        counter-reset: step;
+      }
+      .step {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1rem;
+        position: relative;
+        counter-increment: step;
+      }
+      .step::before {
+        content: counter(step);
+        display: grid;
+        place-items: center;
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 50%;
+        background: var(--navy);
+        color: #fff;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+      }
+      .step h3 {
+        margin: 0 0 0.25rem;
+        font-size: 1rem;
+      }
+      .step code {
+        font-size: 0.78rem;
+        background: #f3efe6;
+        padding: 0.1rem 0.35rem;
+        border-radius: 5px;
+      }
+      .step p {
+        margin: 0.4rem 0 0.6rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+      }
+      .tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 0.15rem 0.55rem;
+        border-radius: 999px;
+      }
+      .tag.done {
+        background: #e3f1e6;
+        color: #1d6b34;
+      }
+      .tag.next {
+        background: #fff1e0;
+        color: #8a4b12;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1.1rem 1.2rem;
+      }
+      .card h3 {
+        margin: 0 0 0.35rem;
+        font-size: 1.02rem;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+      .labels {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 0.8rem;
+      }
+      .labels span {
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fff;
+      }
+      .news a.card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      .news a.card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(16, 32, 48, 0.1);
+      }
+      .outlet {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--accent-ink);
+        margin-bottom: 0.3rem;
+      }
+      .note {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+        background: #fff;
+        border-left: 4px solid var(--accent);
+        padding: 0.7rem 1rem;
+        border-radius: 0 10px 10px 0;
+      }
+      footer {
+        margin-top: 3.5rem;
+        padding: 2rem 0 3rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .news a.card {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap">
+        <nav class="nav" aria-label="Site">
+          <strong>Data Center Visualizer</strong>
+          <a class="btn ghost" href="./?mock=1">Open the 3D scene</a>
+        </nav>
+        <p class="kicker">How it works</p>
+        <h1>The product is the pipeline. The 3D scene is its output.</h1>
+        <p class="lede">
+          Public development records are scattered across city filings, state
+          permits and GIS servers. Our pipeline gathers them, checks them,
+          labels every number with where it came from, and publishes a versioned
+          package. Any viewer can render that package, and anyone can trace a
+          building's height back to its source.
+        </p>
+        <a class="btn" href="./?mock=1">See the Lowell pilot</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section aria-labelledby="flow-title">
+        <h2 id="flow-title">From public records to a 3D scene</h2>
+        <p class="section-lede">
+          Each stage is a command in the <code>dcviz</code> Python CLI. Every
+          stage writes reviewable files, so a person can check the work before
+          anything is published.
+        </p>
+        <div class="flow">
+          <article class="step">
+            <h3>Fetch</h3>
+            <code>dcviz fetch</code>
+            <p>
+              Download city plans, state permits and MassGIS layers, and record
+              their source.
+            </p>
+            <span class="tag done">Working</span>
+          </article>
+          <article class="step">
+            <h3>Context</h3>
+            <code>dcviz context</code>
+            <p>
+              Build buildings, roads, rail, water and parks for 1.2 km around
+              the site.
+            </p>
+            <span class="tag done">Working</span>
+          </article>
+          <article class="step">
+            <h3>Extract plan</h3>
+            <code>dcviz extract-plan</code>
+            <p>
+              Pull footprints, heights and equipment from the proposal plan set.
+            </p>
+            <span class="tag next">Next</span>
+          </article>
+          <article class="step">
+            <h3>Georeference</h3>
+            <code>dcviz georef</code>
+            <p>
+              Place the plan on the map with control points and a measured
+              error.
+            </p>
+            <span class="tag next">Next</span>
+          </article>
+          <article class="step">
+            <h3>Package and validate</h3>
+            <code>dcviz contract-check</code>
+            <p>
+              Check the package against a shared JSON contract, then publish it
+              as a new version.
+            </p>
+            <span class="tag done">Contract check working</span>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="trust-title">
+        <h2 id="trust-title">Built for trust</h2>
+        <p class="section-lede">
+          A civic visual is only useful if people can believe it. These rules
+          are part of the pipeline's contract and are not optional.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <h3>Every value is labeled</h3>
+            <p>Each height, size and position says how we know it.</p>
+            <div class="labels">
+              <span>Official</span><span>Derived</span><span>Estimated</span
+              ><span>Unknown</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Versioned, never silently changed</h3>
+            <p>
+              A corrected value means a new package version. The Lowell pilot is
+              <code>lowell-markley/0.1.0</code>, reviewed and approved for
+              context-only publication.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Neutral by design</h3>
+            <p>
+              The tool shows documented geometry. It does not rate the project,
+              predict health effects or decide legal compliance.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Privacy first</h3>
+            <p>
+              Owner names, abutter names and contact details are removed before
+              publication. Only data cleared for redistribution is included.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="news" aria-labelledby="news-title">
+        <h2 id="news-title">Why Lowell, why now</h2>
+        <p class="section-lede">
+          The Markley data center at the former Prince pasta plant is the
+          subject of a permit dispute, a city moratorium and a court order. News
+          reports describe residents, the company and the state arguing over
+          equipment whose size and placement is hard to picture from paper
+          plans.
+        </p>
+        <div class="grid">
+          <a
+            class="card"
+            href="https://www.wgbh.org/news/local/2026-08-11/court-orders-pause-lowell-data-center-expansion"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">GBH News · Aug 2026</div>
+            <h3>Court orders pause on Lowell data center expansion</h3>
+            <p>
+              A Superior Court judge pauses new diesel generator installations
+              while the air permit lawsuit continues.
+            </p>
+          </a>
+          <a
+            class="card"
+            href="https://www.wgbh.org/news/local/2026-07-29/in-one-mass-city-the-fight-over-a-data-center-has-hit-a-crisis-point"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">GBH News · Jul 2026</div>
+            <h3>
+              In one Mass. city, the fight over a data center hits a crisis
+              point
+            </h3>
+            <p>
+              Background on the dispute between neighbors, the city and Markley.
+            </p>
+          </a>
+          <a
+            class="card"
+            href="https://www.wbur.org/news/2026/07/29/lowell-data-center-massachusetts-markley-group-environmental-justice"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">WBUR · Jul 2026</div>
+            <h3>Lowell data center and environmental justice</h3>
+            <p>
+              Coverage of the Sacred Heart neighborhood and the expansion plans.
+            </p>
+          </a>
+          <a
+            class="card"
+            href="https://www.boston.com/news/local-news/2026/05/07/lowell-residents-file-massachusetts-first-lawsuit-against-a-data-center"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">Boston.com · May 2026</div>
+            <h3>
+              Lowell residents file Massachusetts' first lawsuit against a data
+              center
+            </h3>
+            <p>
+              The lawsuit challenges the state air permit for added generators
+              and cooling towers.
+            </p>
+          </a>
+          <a
+            class="card"
+            href="https://www.wbur.org/news/2026/04/06/data-centers-ai-massachusetts-pollution-pushback"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">WBUR · Apr 2026</div>
+            <h3>Data centers, AI and pushback in Massachusetts</h3>
+            <p>Statewide context on data center growth and local response.</p>
+          </a>
+          <a
+            class="card"
+            href="https://www.datacenterdynamics.com/en/news/markley-group-to-open-50mw-data-center-in-spaghettiville/"
+            target="_blank"
+            rel="noopener"
+          >
+            <div class="outlet">DatacenterDynamics</div>
+            <h3>Markley Group to open 50 MW data center in "Spaghettiville"</h3>
+            <p>
+              Original plans to convert the former pasta plant into a data
+              center.
+            </p>
+          </a>
+        </div>
+        <p class="note">
+          We link to reporting for context only. Data Center Visualizer takes no
+          position on the project or the lawsuit. The company says it meets
+          state environmental standards; residents dispute the permit. The 3D
+          scene uses only documented public records.
+        </p>
+      </section>
+
+      <section aria-labelledby="next-title">
+        <h2 id="next-title">Where it goes next</h2>
+        <p class="section-lede">
+          Data and display are separate, so growth is mostly new packages, not
+          new app code.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <h3>1. Finish the Lowell proposal</h3>
+            <p>
+              Georeference the August 2024 plan set and model the generators and
+              cooling towers from permit filings. Then residents can switch
+              between today and the proposal.
+            </p>
+          </div>
+          <div class="card">
+            <h3>2. Any Massachusetts town</h3>
+            <p>
+              MassGIS building, parcel and road layers cover the whole state, so
+              the context stage can extend beyond Lowell.
+            </p>
+          </div>
+          <div class="card">
+            <h3>3. Any large project</h3>
+            <p>
+              The same contract fits battery storage, warehouses, solar farms
+              and housing developments that go before a planning board.
+            </p>
+          </div>
+          <div class="card">
+            <h3>4. See it from your street</h3>
+            <p>
+              Enter an address and view the proposal from a nearby public
+              sidewalk or park, with no address stored.
+            </p>
+          </div>
+          <div class="card">
+            <h3>5. Real terrain and shadows</h3>
+            <p>
+              Add statewide LiDAR elevation and sun-angle shadows by date, so
+              the scene shows grade and shading, not a flat plane.
+            </p>
+          </div>
+          <div class="card">
+            <h3>6. Hearing-ready exports</h3>
+            <p>
+              Print-ready images with source labels, made for public comment
+              letters, local reporting and planning-board slides.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      Data: MassGIS (Bureau of Geographic Information, Commonwealth of
+      Massachusetts), MassDOT, Central Transportation Planning Staff, USGS,
+      MassDEP, EOEEA, and © OpenStreetMap contributors (ODbL 1.0). Built with
+      Kiro spec-driven development.
+      <a href="./?mock=1">Back to the 3D scene</a>
+    </footer>
+  </body>
+</html>

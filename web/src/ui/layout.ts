@@ -1,3 +1,5 @@
+import { OVERLAY_CSS } from './overlay';
+
 export function installAppLayout(): void {
   if (document.querySelector('[data-app-layout]')) return;
   const style = document.createElement('style');
@@ -18,6 +20,23 @@ export function installAppLayout(): void {
     table { width: 100%; border-collapse: collapse; font-size: .85rem; }
     caption { text-align: left; font-weight: 700; padding: .5rem; }
     th, td { padding: .4rem; border: 1px solid #6b625b; text-align: left; }
+    .app-header h1 { letter-spacing: -.01em; }
+    .app-tagline { margin: .1rem 0 0; font-size: .8rem; color: #f5c7a9; }
+    .app-header p[role=status] { margin-left: auto !important; }
+    .app-header p[role=status] { margin: 0; padding: .3rem .8rem; border-radius: 999px;
+      background: rgba(255,255,255,.12); font-size: .85rem; }
+    .app-header button { border: 0; border-radius: 999px; padding: .4rem 1rem;
+      background: #e8743b; color: #fff; font-weight: 600; cursor: pointer; }
+    .app-header button:hover { background: #d4622b; }
+    .app-header .how-link { color: #fff; font-weight: 600; text-decoration: none; padding: .4rem .9rem;
+      border-radius: 999px; box-shadow: 0 0 0 2px rgba(255,255,255,.45) inset; }
+    .app-header .how-link:hover { background: rgba(255,255,255,.12); }
+    .app-header .focus-button { background: #fff; color: #b4532a; box-shadow: 0 0 0 2px #f07a3f inset; }
+    .app-header .focus-button:hover { background: #fff1e8; }
+    .inventory-wrap { padding: .4rem 1rem 1rem; }
+    th { background: #ece6d9; }
+    th, td { border-color: #d8d0c2 !important; }
+    ${OVERLAY_CSS}
     @media (max-width: 600px) {
       #app { grid-template-rows: 1fr auto auto !important; }
       .app-header { order: 2; padding: .5rem !important; max-height: 36vh; overflow: auto; }

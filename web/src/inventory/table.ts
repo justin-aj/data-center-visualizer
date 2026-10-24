@@ -70,18 +70,16 @@ export function createInventoryTable(
 
 export function createContextInventoryTable(
   context: ContextScene,
-  manifest: Manifest,
 ): HTMLTableElement {
   const table = document.createElement('table');
   table.createCaption().textContent = 'Visible context layers';
   const head = table.createTHead().insertRow();
-  for (const label of ['Layer', 'Count', 'Details', 'Sources']) {
+  for (const label of ['Layer', 'Count', 'Details']) {
     const cell = document.createElement('th');
     cell.scope = 'col';
     cell.textContent = label;
     head.append(cell);
   }
-  const sourceNames = `${manifest.sources.length} versioned package sources`;
   const estimated = context.buildings.filter(
     (building) => building.heightStatus === 'estimated',
   ).length;
@@ -95,7 +93,7 @@ export function createContextInventoryTable(
   const body = table.createTBody();
   for (const [layer, count, details] of rows) {
     const row = body.insertRow();
-    for (const value of [layer, String(count), details, sourceNames]) {
+    for (const value of [layer, String(count), details]) {
       row.insertCell().textContent = value;
     }
   }

@@ -20,6 +20,12 @@ import {
   createInventoryTable,
 } from './inventory/table';
 import { buildContextLayers, FLAT_GROUND_NOTE } from './scene/context';
+import {
+  buildMockProposal,
+  MOCK_FOCUS,
+  mockEnabled,
+  MOCK_NOTE,
+} from './scene/mock';
 import { buildProposalFeatures } from './scene/proposal';
 import { createRenderCore } from './scene/renderer';
 import { changeMode, defaultAppState, type ComparisonMode } from './state';
@@ -32,6 +38,7 @@ import {
 } from './ui/fallback';
 import { bindSceneKeyboard } from './ui/keyboard';
 import { installAppLayout } from './ui/layout';
+import { createSceneOverlay } from './ui/overlay';
 
 export const APP_TITLE = 'Data Center Visualizer';
 
@@ -50,7 +57,8 @@ export async function startApp(root: HTMLElement): Promise<void> {
     'height:100vh;display:grid;grid-template-rows:auto 1fr auto';
   const header = document.createElement('header');
   header.className = 'app-header';
-  header.style.cssText = 'padding:.6rem 1rem;background:#f7f3ea;color:#1e2a31';
+  header.style.cssText =
+    'padding:.7rem 1.2rem;background:linear-gradient(90deg,#14232d,#1f3a4a);color:#fff';
   const title = document.createElement('h1');
   title.textContent = APP_TITLE;
   title.style.margin = '0';
@@ -64,7 +72,13 @@ export async function startApp(root: HTMLElement): Promise<void> {
   sceneHost.className = 'scene-shell';
   sceneHost.setAttribute('aria-label', '3D comparison');
   sceneHost.style.cssText = 'position:relative;min-height:0';
-  header.append(title, status, controls);
+  const tagline = document.createElement('p');
+  tagline.className = 'app-tagline';
+  tagline.textContent =
+    'See proposed development to scale, in the real neighborhood.';
+  const brand = document.createElement('div');
+  brand.append(title, tagline);
+  header.append(brand, status, controls);
   root.replaceChildren(header, sceneHost);
 
   const activePackagePath = packagePath();
@@ -127,6 +141,18 @@ export async function startApp(root: HTMLElement): Promise<void> {
   const proposal = buildProposalFeatures(loaded.proposal, 'full');
   applyComparisonLayers(proposal.group, proposalMembership(loaded.proposal));
   core.scene.add(context.group, proposal.group);
+  const showMock = mockEnabled();
+  if (showMock) core.scene.add(buildMockProposal());
+  const overlay = createSceneOverlay({
+    title: loaded.manifest.title,
+    siteAddress: loaded.manifest.siteAddress,
+    baselineDate: loaded.manifest.baselineDate,
+    contextRadiusM: loaded.manifest.contextRadiusM,
+    attributionCount: loaded.manifest.attribution.length,
+    context: loaded.context,
+    showMock,
+  });
+  sceneHost.append(overlay.element);
   core.controls.maxDistance = loaded.manifest.contextRadiusM * 2;
   const firstViewpoint = loaded.manifest.viewpoints[0];
   if (!firstViewpoint) throw new Error('The package has no viewpoint.');
@@ -212,7 +238,41 @@ export async function startApp(root: HTMLElement): Promise<void> {
       );
     }
   }
-  controls.append(exportButton, exportSummary);
+  const howLink = document.createElement('a');
+  howLink.className = 'how-link';
+  howLink.href = './pipeline.html';
+  howLink.textContent = 'How it works';
+  controls.append(howLink, exportButton, exportSummary);
+  if (showMock) {
+    const focusButton = document.createElement('button');
+    focusButton.type = 'button';
+    focusButton.className = 'focus-button';
+    focusButton.textContent = 'Focus on proposal';
+    focusButton.addEventListener('click', () => {
+      const fromPosition = core.camera.position.clone();
+      const fromTarget = core.controls.target.clone();
+      const toPosition = fromPosition.clone().set(...MOCK_FOCUS.position);
+      const toTarget = fromTarget.clone().set(...MOCK_FOCUS.target);
+      const reduced = window.matchMedia(
+        '(prefers-reduced-motion: reduce)',
+      ).matches;
+      const durationMs = reduced ? 0 : 1_200;
+      const start = performance.now();
+      overlay.setViewpoint('Proposed buildings');
+      const step = (now: number): void => {
+        const t =
+          durationMs === 0 ? 1 : Math.min(1, (now - start) / durationMs);
+        const eased = 1 - (1 - t) ** 3;
+        core.camera.position.lerpVectors(fromPosition, toPosition, eased);
+        core.controls.target.lerpVectors(fromTarget, toTarget, eased);
+        core.controls.update();
+        draw();
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+    controls.prepend(focusButton);
+  }
   watchContextLoss(core.renderer.domElement, (message) => {
     status.textContent = message;
   });
@@ -224,7 +284,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
   inventoryWrap.setAttribute('aria-label', 'Scene inventory');
   inventoryWrap.append(
     contextOnly
-      ? createContextInventoryTable(loaded.context, loaded.manifest)
+      ? createContextInventoryTable(loaded.context)
       : createInventoryTable(loaded.proposal, loaded.manifest),
   );
   root.append(inventoryWrap);
@@ -252,6 +312,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
     nextViewpoint: () => {
       viewpointIndex = (viewpointIndex + 1) % loaded.manifest.viewpoints.length;
       const viewpoint = loaded.manifest.viewpoints[viewpointIndex];
+      if (viewpoint) overlay.setViewpoint(viewpoint.label);
       if (viewpoint)
         void moveToViewpoint(core.camera, viewpoint, [], {
           reducedMotion: true,
@@ -262,6 +323,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
         (viewpointIndex - 1 + loaded.manifest.viewpoints.length) %
         loaded.manifest.viewpoints.length;
       const viewpoint = loaded.manifest.viewpoints[viewpointIndex];
+      if (viewpoint) overlay.setViewpoint(viewpoint.label);
       if (viewpoint)
         void moveToViewpoint(core.camera, viewpoint, [], {
           reducedMotion: true,
@@ -270,7 +332,9 @@ export async function startApp(root: HTMLElement): Promise<void> {
   });
   draw();
   if (contextOnly)
-    status.textContent = 'Context-only scene ready. No proposal is shown.';
+    status.textContent = showMock
+      ? MOCK_NOTE
+      : 'Context-only scene ready. No proposal is shown.';
 }
 
 const root = document.querySelector<HTMLElement>('#app');

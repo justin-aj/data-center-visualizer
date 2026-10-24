@@ -33,7 +33,7 @@ export function createNoWebGlFallback(
     section.append(
       heading,
       message,
-      createContextInventoryTable(context, manifest),
+      createContextInventoryTable(context),
     );
     return section;
   }
