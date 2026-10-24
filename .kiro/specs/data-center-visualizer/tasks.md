@@ -173,7 +173,7 @@ How to use this file:
 ## Lane B: Web app
 
 - [ ] 6. Web foundation and render core
-- [ ] 6.1 Scaffold the web app
+- [x] 6.1 Scaffold the web app
   - Vite, strict TypeScript, ESLint, Prettier, vitest, and Playwright (Chromium and WebKit). Scripts: `dev`, `build`, `preview`, `lint`, `test`, `test:e2e`.
   - Add `web/scripts/sync-data.mjs` (design section 6.1), run before `dev`, `build`, and `test:e2e`. It must work when `data/published/` is empty.
   - Configure Playwright to run against `vite preview` of the production build.
