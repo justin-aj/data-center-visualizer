@@ -240,7 +240,7 @@ How to use this file:
   - Done when: the tests pass, and any defect they found is recorded.
   - _Requirements: 4.3, 4.4_
 
-- [ ] 8. Viewpoints, shadows, and inspection
+- [x] 8. Viewpoints, shadows, and inspection
 - [x] 8.1 Viewpoints
   - Aerial overview plus the manifest viewpoints. Ground viewpoints are fixed 1.6 m eye positions with look-around (yaw and pitch) only. Instant cuts under reduced motion.
   - Depends on: 7.2
@@ -265,7 +265,7 @@ How to use this file:
   - Files: `web/src/sun/**`, `web/tests/sun/*.test.ts`
   - Done when: the sun position matches reference values for Lowell within 0.5° at three times, including both DST transition days.
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
-- [ ] 8.5 Inspect panel
+- [x] 8.5 Inspect panel
   - Raycast by `featureId`. Shows label, state, the status of position, footprint, and height, the method, sources (linked when public, cited otherwise), and the kind of any related claim.
   - Depends on: 7.3
   - Files: `web/src/inspect/**`
