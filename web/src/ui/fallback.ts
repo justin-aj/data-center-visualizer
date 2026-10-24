@@ -1,5 +1,9 @@
-import type { Manifest, Proposal } from '../data/types';
-import { createInventoryTable } from '../inventory/table';
+import type { ContextScene, Manifest, Proposal } from '../data/types';
+import { isContextOnlyManifest } from '../data/types';
+import {
+  createContextInventoryTable,
+  createInventoryTable,
+} from '../inventory/table';
 
 export const SIMPLE_GEOMETRY_FALLBACK_NOTE =
   'Detailed GLB assets are not loaded. Future asset failures must use extruded geometry.';
@@ -16,14 +20,25 @@ export function webGlAvailable(): boolean {
 export function createNoWebGlFallback(
   manifest: Manifest,
   proposal: Proposal,
+  context: ContextScene,
 ): HTMLElement {
   const section = document.createElement('section');
   section.dataset['fallback'] = 'no-webgl';
   const heading = document.createElement('h2');
   heading.textContent = 'Static scene';
   const message = document.createElement('p');
+  if (isContextOnlyManifest(manifest)) {
+    message.textContent =
+      '3D graphics are unavailable. This package shows context only and no proposal.';
+    section.append(
+      heading,
+      message,
+      createContextInventoryTable(context, manifest),
+    );
+    return section;
+  }
   message.textContent =
-    '3D graphics are unavailable. This image shows the bundled pilot view.';
+    '3D graphics are unavailable. This image shows the bundled proposal view.';
   const image = document.createElement('img');
   image.src = '/fallback/synthetic-site.png';
   image.alt = `${manifest.title}, proposed aerial view. ${manifest.attribution.join(' ')}`;

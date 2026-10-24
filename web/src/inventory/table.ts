@@ -1,4 +1,9 @@
-import type { Manifest, Proposal, ProposalFeature } from '../data/types';
+import type {
+  ContextScene,
+  Manifest,
+  Proposal,
+  ProposalFeature,
+} from '../data/types';
 
 function dimensions(feature: ProposalFeature): string {
   const height =
@@ -59,6 +64,40 @@ export function createInventoryTable(
       sourceNames.join(', ') || 'No source listed',
     ])
       row.insertCell().textContent = value;
+  }
+  return table;
+}
+
+export function createContextInventoryTable(
+  context: ContextScene,
+  manifest: Manifest,
+): HTMLTableElement {
+  const table = document.createElement('table');
+  table.createCaption().textContent = 'Visible context layers';
+  const head = table.createTHead().insertRow();
+  for (const label of ['Layer', 'Count', 'Details', 'Sources']) {
+    const cell = document.createElement('th');
+    cell.scope = 'col';
+    cell.textContent = label;
+    head.append(cell);
+  }
+  const sourceNames = `${manifest.sources.length} versioned package sources`;
+  const estimated = context.buildings.filter(
+    (building) => building.heightStatus === 'estimated',
+  ).length;
+  const rows: [string, number, string][] = [
+    ['Buildings', context.buildings.length, `${estimated} estimated heights`],
+    ['Roads', context.roads.length, 'Published road corridors'],
+    ['Railways', context.railways.length, 'Published rail corridors'],
+    ['Water', context.water.length, 'Published water areas'],
+    ['Open space', context.openSpace.length, 'Public access shown when known'],
+  ];
+  const body = table.createTBody();
+  for (const [layer, count, details] of rows) {
+    const row = body.insertRow();
+    for (const value of [layer, String(count), details, sourceNames]) {
+      row.insertCell().textContent = value;
+    }
   }
   return table;
 }

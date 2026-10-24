@@ -113,8 +113,7 @@ export interface ReviewRecord {
   checklistRef: string;
 }
 
-export interface Manifest {
-  schemaVersion: '1.0.0';
+export interface ManifestBase {
   projectId: string;
   packageVersion: string;
   title: string;
@@ -126,7 +125,6 @@ export interface Manifest {
   origin: Origin;
   datum: FlatDatum;
   contextRadiusM: number;
-  georeference: Georeference;
   sources: SourceReference[];
   claims: Claim[];
   viewpoints: Viewpoint[];
@@ -135,6 +133,34 @@ export interface Manifest {
   review: ReviewRecord;
   attribution: string[];
   excludedFields: string[];
+}
+
+export type ProposalManifest = ManifestBase &
+  (
+    | {
+        schemaVersion: '1.0.0';
+        packageKind?: never;
+        georeference: Georeference;
+      }
+    | {
+        schemaVersion: '1.1.0';
+        packageKind?: 'proposal';
+        georeference: Georeference;
+      }
+  );
+
+export interface ContextOnlyManifest extends ManifestBase {
+  schemaVersion: '1.1.0';
+  packageKind: 'context-only';
+  georeference?: never;
+}
+
+export type Manifest = ProposalManifest | ContextOnlyManifest;
+
+export function isContextOnlyManifest(
+  manifest: Manifest,
+): manifest is ContextOnlyManifest {
+  return manifest.packageKind === 'context-only';
 }
 
 export interface HeightValue {

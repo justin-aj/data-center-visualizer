@@ -3,8 +3,10 @@ import {
   Mesh,
   MeshStandardMaterial,
   PlaneGeometry,
+  type BufferGeometry,
   type Material,
 } from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 import type { ContextScene } from '../data/types';
 import {
@@ -54,6 +56,35 @@ function addFlatPolygon(
   group.add(mesh);
 }
 
+function mergeLineGroups(
+  groups: Group[],
+  layerMaterial: Material,
+  name: string,
+): Mesh | null {
+  const geometries: BufferGeometry[] = [];
+  for (const group of groups) {
+    for (const child of group.children) {
+      if (!(child instanceof Mesh)) continue;
+      child.updateMatrix();
+      const geometry = child.geometry.clone();
+      geometry.applyMatrix4(child.matrix);
+      geometries.push(geometry);
+    }
+  }
+  if (geometries.length === 0) return null;
+  const merged = mergeGeometries(geometries, false);
+  for (const geometry of geometries) geometry.dispose();
+  for (const group of groups) {
+    group.traverse((object) => {
+      if (object instanceof Mesh) object.geometry.dispose();
+    });
+  }
+  if (!merged) throw new Error(`${name} geometry could not be merged.`);
+  const mesh = new Mesh(merged, layerMaterial);
+  mesh.name = name;
+  mesh.receiveShadow = true;
+  return mesh;
+}
 function groundPlane(radiusM: number): Mesh {
   const mesh = new Mesh(
     new PlaneGeometry(radiusM * 2, radiusM * 2),
@@ -87,30 +118,30 @@ export function buildContextLayers(
   }
 
   const roadMaterial = material(sceneStyle.road);
-  for (const [index, road] of context.roads.entries()) {
-    const roads = wideLineMeshes(
-      road.geometry,
-      road.widthM,
-      0.1,
-      0.02,
-      roadMaterial,
-    );
-    roads.name = `Road ${index + 1}: ${road.class}`;
-    group.add(roads);
-  }
+  const roads = mergeLineGroups(
+    context.roads.map((road) =>
+      wideLineMeshes(road.geometry, road.widthM, 0.1, 0.02, roadMaterial),
+    ),
+    roadMaterial,
+    'Context roads',
+  );
+  if (roads) group.add(roads);
 
   const railwayMaterial = material(sceneStyle.contextOutline);
-  for (const [index, railway] of context.railways.entries()) {
-    const railways = wideLineMeshes(
-      railway.geometry,
-      railway.widthM,
-      0.14,
-      0.04,
-      railwayMaterial,
-    );
-    railways.name = `Railway ${index + 1}`;
-    group.add(railways);
-  }
+  const railways = mergeLineGroups(
+    context.railways.map((railway) =>
+      wideLineMeshes(
+        railway.geometry,
+        railway.widthM,
+        0.14,
+        0.04,
+        railwayMaterial,
+      ),
+    ),
+    railwayMaterial,
+    'Context railways',
+  );
+  if (railways) group.add(railways);
 
   const waterMaterial = material(sceneStyle.water);
   for (const water of context.water) {

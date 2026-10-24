@@ -4,6 +4,7 @@ import {
   proposalMembership,
 } from './compare/membership';
 import { renderComparison } from './compare/renderer';
+import { packagePath } from './config';
 import {
   loadPackage,
   PackageLoadError,
@@ -11,9 +12,13 @@ import {
   validateProposal,
 } from './data/loader';
 import type { ContextScene, LoadedPackage } from './data/types';
+import { isContextOnlyManifest } from './data/types';
 import { CONTEXT_LOSS_MESSAGE, watchContextLoss } from './export/context-loss';
 import { downloadBlob, overlayLines, renderPng } from './export/png';
-import { createInventoryTable } from './inventory/table';
+import {
+  createContextInventoryTable,
+  createInventoryTable,
+} from './inventory/table';
 import { buildContextLayers, FLAT_GROUND_NOTE } from './scene/context';
 import { buildProposalFeatures } from './scene/proposal';
 import { createRenderCore } from './scene/renderer';
@@ -62,6 +67,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
   header.append(title, status, controls);
   root.replaceChildren(header, sceneHost);
 
+  const activePackagePath = packagePath();
   const emptyContext: ContextScene = {
     ground: { elevationM: null },
     buildings: [],
@@ -72,7 +78,7 @@ export async function startApp(root: HTMLElement): Promise<void> {
   };
   let loaded: LoadedPackage;
   try {
-    loaded = await loadPackage('/fixtures/synthetic-site', {
+    loaded = await loadPackage(activePackagePath, {
       onProgress: (progress) => {
         status.textContent =
           progress.phase === 'complete'
@@ -90,8 +96,8 @@ export async function startApp(root: HTMLElement): Promise<void> {
       throw error;
     }
     const [manifestResponse, proposalResponse] = await Promise.all([
-      fetch('/fixtures/synthetic-site/manifest.json'),
-      fetch('/fixtures/synthetic-site/proposal.json'),
+      fetch(`${activePackagePath}/manifest.json`),
+      fetch(`${activePackagePath}/proposal.json`),
     ]);
     loaded = {
       manifest: validateManifest(await manifestResponse.json()),
@@ -104,12 +110,13 @@ export async function startApp(root: HTMLElement): Promise<void> {
 
   if (!webGlAvailable()) {
     sceneHost.replaceChildren(
-      createNoWebGlFallback(loaded.manifest, loaded.proposal),
+      createNoWebGlFallback(loaded.manifest, loaded.proposal, loaded.context),
     );
     status.textContent = '3D graphics unavailable. Static scene loaded.';
     return;
   }
 
+  const contextOnly = isContextOnlyManifest(loaded.manifest);
   const core = createRenderCore(sceneHost);
   const oldGround = core.scene.getObjectByName('Flat demonstration ground');
   if (oldGround) oldGround.visible = false;
@@ -166,19 +173,25 @@ export async function startApp(root: HTMLElement): Promise<void> {
   exportButton.type = 'button';
   exportButton.textContent = 'Download PNG';
   exportButton.addEventListener('click', () => {
-    const overlay = {
+    const baseOverlay = {
       title: loaded.manifest.title,
       version: loaded.manifest.packageVersion,
       date: state.date,
-      mode: state.mode,
       viewpoint: loaded.manifest.viewpoints[0]?.kind ?? 'aerial',
       legend: FLAT_GROUND_NOTE,
       attribution: loaded.manifest.attribution,
-      confidence: loaded.manifest.georeference.approximate
-        ? 'Approximate placement'
-        : 'Reviewed placement',
       url: window.location.href,
     };
+    const overlay = isContextOnlyManifest(loaded.manifest)
+      ? { ...baseOverlay, packageKind: 'context-only' as const }
+      : {
+          ...baseOverlay,
+          packageKind: 'proposal' as const,
+          mode: state.mode,
+          confidence: loaded.manifest.georeference.approximate
+            ? 'Approximate placement'
+            : 'Reviewed placement',
+        };
     exportSummary.value = overlayLines(overlay).join(' | ');
     void renderPng(core.renderer, core.scene, core.camera, {
       width: 1_200,
@@ -191,15 +204,15 @@ export async function startApp(root: HTMLElement): Promise<void> {
           error instanceof Error ? error.message : 'PNG export failed.';
       });
   });
-  controls.append(
-    modeGroup,
-    createCategoryControls(proposal.group),
-    exportButton,
-    exportSummary,
-  );
-  sceneHost.append(
-    createApproximateBanner(loaded.manifest.georeference.approximate),
-  );
+  if (!contextOnly) {
+    controls.append(modeGroup, createCategoryControls(proposal.group));
+    if (!isContextOnlyManifest(loaded.manifest)) {
+      sceneHost.append(
+        createApproximateBanner(loaded.manifest.georeference.approximate),
+      );
+    }
+  }
+  controls.append(exportButton, exportSummary);
   watchContextLoss(core.renderer.domElement, (message) => {
     status.textContent = message;
   });
@@ -209,7 +222,11 @@ export async function startApp(root: HTMLElement): Promise<void> {
   inventoryWrap.className = 'inventory-wrap';
   inventoryWrap.tabIndex = 0;
   inventoryWrap.setAttribute('aria-label', 'Scene inventory');
-  inventoryWrap.append(createInventoryTable(loaded.proposal, loaded.manifest));
+  inventoryWrap.append(
+    contextOnly
+      ? createContextInventoryTable(loaded.context, loaded.manifest)
+      : createInventoryTable(loaded.proposal, loaded.manifest),
+  );
   root.append(inventoryWrap);
 
   let viewpointIndex = 0;
@@ -252,6 +269,8 @@ export async function startApp(root: HTMLElement): Promise<void> {
     },
   });
   draw();
+  if (contextOnly)
+    status.textContent = 'Context-only scene ready. No proposal is shown.';
 }
 
 const root = document.querySelector<HTMLElement>('#app');

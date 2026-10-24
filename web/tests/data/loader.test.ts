@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 
 import contextFixture from '../../../contracts/fixtures/synthetic-site/context.json';
+import manifestContextOnlyFixture from '../../../contracts/fixtures/synthetic-site/manifest.context-only.json';
 import manifestFixture from '../../../contracts/fixtures/synthetic-site/manifest.json';
 import proposalFixture from '../../../contracts/fixtures/synthetic-site/proposal.json';
 import {
@@ -76,6 +77,9 @@ describe('package validation', () => {
     expect(validateManifest(manifestFixture).projectId).toBe(
       'synthetic-civic-site',
     );
+    const contextOnly = validateManifest(manifestContextOnlyFixture);
+    expect(contextOnly.packageKind).toBe('context-only');
+    expect('georeference' in contextOnly).toBe(false);
     expect(validateProposal(proposalFixture).features.length).toBeGreaterThan(
       0,
     );
@@ -165,6 +169,34 @@ describe('package loading', () => {
     expect(progress.at(-1)).toMatchObject({ completed: 3, total: 3 });
   });
 
+  it('loads all three files for a context-only package', async () => {
+    const fixtures: Record<PackageDocument, unknown> = {
+      manifest: manifestContextOnlyFixture,
+      proposal: { features: [] },
+      context: contextFixture,
+    };
+    const fetcher = vi.fn(async (input: string | URL | Request) => {
+      const name = new URL(String(input)).pathname.split('/').at(-1);
+      const document = name?.replace('.json', '') as PackageDocument;
+      return new Response(JSON.stringify(fixtures[document]), {
+        status: fixtures[document] ? 200 : 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    });
+
+    const result = await loadPackage('https://example.invalid/context-only', {
+      fetch: fetcher,
+    });
+
+    expect(result.manifest.packageKind).toBe('context-only');
+    expect(result.proposal.features).toEqual([]);
+    expect(fetcher).toHaveBeenCalledTimes(3);
+    expect(fetcher.mock.calls.map(([input]) => String(input))).toEqual([
+      'https://example.invalid/context-only/manifest.json',
+      'https://example.invalid/context-only/proposal.json',
+      'https://example.invalid/context-only/context.json',
+    ]);
+  });
   it('names the URL when a document cannot load', async () => {
     const fetcher = vi.fn(async () => new Response(null, { status: 503 }));
 

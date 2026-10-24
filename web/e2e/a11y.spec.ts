@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 
 test('supports the main keyboard workflow at 320 pixels', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto('/');
+  await page.goto('/?fixture=synthetic-site');
   await expect(page.getByText('Scene ready.')).toBeVisible();
   await expect(
     page.getByRole('table', { name: 'Visible scene features' }),
@@ -25,7 +25,7 @@ test('supports the main keyboard workflow at 320 pixels', async ({ page }) => {
 });
 
 test('has no serious or critical axe findings', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?fixture=synthetic-site');
   await expect(page.getByText('Scene ready.')).toBeVisible();
 
   const results = await new AxeBuilder({ page }).analyze();

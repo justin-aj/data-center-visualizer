@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { expect, test } from '@playwright/test';
 
 test('downloads an attributed PNG matching app state', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?fixture=synthetic-site');
   await expect(page.getByText('Scene ready.')).toBeVisible();
   await page.getByLabel('current').check();
 
@@ -23,7 +23,7 @@ test('downloads an attributed PNG matching app state', async ({ page }) => {
 });
 
 test('shows a retry message after WebGL context loss', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?fixture=synthetic-site');
   await expect(page.getByText('Scene ready.')).toBeVisible();
 
   await page.locator('canvas').dispatchEvent('webglcontextlost');

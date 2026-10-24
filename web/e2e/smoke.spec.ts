@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test('loads the production app', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/?fixture=synthetic-site');
 
   await expect(page).toHaveTitle('Data Center Visualizer');
   await expect(

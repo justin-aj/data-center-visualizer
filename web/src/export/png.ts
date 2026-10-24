@@ -8,17 +8,27 @@ import {
 import { renderComparison } from '../compare/renderer';
 import type { ComparisonMode } from '../state';
 
-export interface ExportOverlay {
+interface ExportOverlayBase {
   title: string;
   version: string;
   date: string;
-  mode: ComparisonMode;
   viewpoint: string;
   legend: string;
   attribution: string[];
-  confidence: string;
   url: string;
 }
+
+export interface ProposalExportOverlay extends ExportOverlayBase {
+  packageKind: 'proposal';
+  mode: ComparisonMode;
+  confidence: string;
+}
+
+export interface ContextOnlyExportOverlay extends ExportOverlayBase {
+  packageKind: 'context-only';
+}
+
+export type ExportOverlay = ProposalExportOverlay | ContextOnlyExportOverlay;
 
 export interface PngExportOptions {
   width: number;
@@ -27,11 +37,20 @@ export interface PngExportOptions {
 }
 
 export function overlayLines(overlay: ExportOverlay): string[] {
+  const packageLines =
+    overlay.packageKind === 'context-only'
+      ? [
+          `${overlay.date} — context only — ${overlay.viewpoint}`,
+          'No proposal is shown.',
+        ]
+      : [
+          `${overlay.date} — ${overlay.mode} — ${overlay.viewpoint}`,
+          `Confidence: ${overlay.confidence}`,
+        ];
   return [
     `${overlay.title} — ${overlay.version}`,
-    `${overlay.date} — ${overlay.mode} — ${overlay.viewpoint}`,
+    ...packageLines,
     overlay.legend,
-    `Confidence: ${overlay.confidence}`,
     ...overlay.attribution,
     overlay.url,
   ];
@@ -61,14 +80,11 @@ export async function renderPng(
 
   try {
     renderer.setRenderTarget(target);
-    renderComparison(
-      renderer,
-      scene,
-      camera,
-      options.overlay.mode,
-      width,
-      height,
-    );
+    const renderMode =
+      options.overlay.packageKind === 'context-only'
+        ? 'current'
+        : options.overlay.mode;
+    renderComparison(renderer, scene, camera, renderMode, width, height);
     renderer.readRenderTargetPixels(target, 0, 0, width, height, pixels);
   } finally {
     renderer.setRenderTarget(previousTarget);
