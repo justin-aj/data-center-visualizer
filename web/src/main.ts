@@ -4,7 +4,13 @@ import {
   proposalMembership,
 } from './compare/membership';
 import { renderComparison } from './compare/renderer';
-import { loadPackage } from './data/loader';
+import {
+  loadPackage,
+  PackageLoadError,
+  validateManifest,
+  validateProposal,
+} from './data/loader';
+import type { ContextScene, LoadedPackage } from './data/types';
 import { CONTEXT_LOSS_MESSAGE, watchContextLoss } from './export/context-loss';
 import { downloadBlob, overlayLines, renderPng } from './export/png';
 import { createInventoryTable } from './inventory/table';
@@ -14,6 +20,11 @@ import { createRenderCore } from './scene/renderer';
 import { changeMode, defaultAppState, type ComparisonMode } from './state';
 import { createApproximateBanner } from './ui/banner';
 import { createCategoryControls } from './ui/categories';
+import {
+  contextMissingMessage,
+  createNoWebGlFallback,
+  webGlAvailable,
+} from './ui/fallback';
 import { bindSceneKeyboard } from './ui/keyboard';
 import { installAppLayout } from './ui/layout';
 
@@ -51,14 +62,54 @@ export async function startApp(root: HTMLElement): Promise<void> {
   header.append(title, status, controls);
   root.replaceChildren(header, sceneHost);
 
-  const loaded = await loadPackage('/fixtures/synthetic-site', {
-    onProgress: (progress) => {
+  const emptyContext: ContextScene = {
+    ground: { elevationM: null },
+    buildings: [],
+    roads: [],
+    railways: [],
+    water: [],
+    openSpace: [],
+  };
+  let loaded: LoadedPackage;
+  try {
+    loaded = await loadPackage('/fixtures/synthetic-site', {
+      onProgress: (progress) => {
+        status.textContent =
+          progress.phase === 'complete'
+            ? 'Scene ready.'
+            : `${progress.phase} ${progress.document ?? 'package'}…`;
+      },
+    });
+  } catch (error) {
+    if (
+      !(error instanceof PackageLoadError) ||
+      !error.url.endsWith('/context.json')
+    ) {
       status.textContent =
-        progress.phase === 'complete'
-          ? 'Scene ready.'
-          : `${progress.phase} ${progress.document ?? 'package'}…`;
-    },
-  });
+        error instanceof Error ? error.message : 'Package unavailable.';
+      throw error;
+    }
+    const [manifestResponse, proposalResponse] = await Promise.all([
+      fetch('/fixtures/synthetic-site/manifest.json'),
+      fetch('/fixtures/synthetic-site/proposal.json'),
+    ]);
+    loaded = {
+      manifest: validateManifest(await manifestResponse.json()),
+      proposal: validateProposal(await proposalResponse.json()),
+      context: emptyContext,
+    };
+    status.textContent = 'Neighborhood context unavailable. Proposal loaded.';
+    sceneHost.append(contextMissingMessage());
+  }
+
+  if (!webGlAvailable()) {
+    sceneHost.replaceChildren(
+      createNoWebGlFallback(loaded.manifest, loaded.proposal),
+    );
+    status.textContent = '3D graphics unavailable. Static scene loaded.';
+    return;
+  }
+
   const core = createRenderCore(sceneHost);
   const oldGround = core.scene.getObjectByName('Flat demonstration ground');
   if (oldGround) oldGround.visible = false;

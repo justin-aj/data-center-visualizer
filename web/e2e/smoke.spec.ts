@@ -7,5 +7,5 @@ test('loads the production app', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: 'Data Center Visualizer' }),
   ).toBeVisible();
-  await expect(page.getByText('The 3D scene is being prepared.')).toBeVisible();
+  await expect(page.getByText('Scene ready.')).toBeVisible();
 });

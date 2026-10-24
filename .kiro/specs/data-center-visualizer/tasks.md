@@ -272,7 +272,7 @@ How to use this file:
   - Done when: every fixture feature shows complete provenance.
   - _Requirements: 8.1, 8.2, 8.3, 8.5_
 
-- [ ] 9. Output, accessibility, and resilience
+- [x] 9. Output, accessibility, and resilience
 - [x] 9.1 PNG export
   - Implement design section 6.6. Video and animation export are out of scope for this task.
   - Depends on: 7.4, 8.1
@@ -285,7 +285,7 @@ How to use this file:
   - Files: `web/src/inventory/**`, `web/src/ui/layout.ts`, `web/src/ui/keyboard.ts`, `web/e2e/a11y.spec.ts`
   - Done when: the full workflow works keyboard-only in e2e, and axe reports no serious or critical issues.
   - _Requirements: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7_
-- [ ] 9.3 Loading, error, and fallback states
+- [x] 9.3 Loading, error, and fallback states
   - Progress, context-missing fallback, the no-WebGL fallback using a fixture image produced with 9.1's export, and distinct loading, unavailable, unknown, and estimated states.
   - The MVP loads no detailed `.glb` assets, so Requirement 10.4 has no trigger. Note this in `fallback.ts` so a future asset loader falls back to extruded geometry.
   - Depends on: 6.3, 9.1, 9.2
