@@ -1,3 +1,60 @@
+# Data Center Visualizer
+# NOTE: .kiro/ must stay tracked (Hackachusetts requirement). Only local settings are ignored.
+
+# Kiro local settings (MCP servers, machine-specific paths)
 .kiro/settings/
-.venv/
+
+# Source documents and internal-only references
+# Raw proposal PDFs and rendered sheets: redistribution rights unverified
 data/raw/
+# Third-party imagery (Google Earth/Maps/Street View): never commit
+/captures/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+pipeline/build/
+pipeline/curation/*/extracted/
+
+# Node / web app
+node_modules/
+web/dist/
+web/.vite/
+web/public/data/
+web/public/fixtures/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test and coverage output
+coverage/
+playwright-report/
+test-results/
+
+# Blender autosaves and backups
+*.blend1
+*.blend2
+*.blend@
+
+# GIS scratch files
+*.qgz~
+*.aux.xml
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

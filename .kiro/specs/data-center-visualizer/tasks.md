@@ -1,0 +1,349 @@
+# Data Center Visualizer Implementation Plan
+
+**Status:** Revised after advisor review. Pending human approval of `design.md`.
+
+How to use this file:
+
+- **Lane A (data pipeline, Ajin)** owns tasks **1–5**. **Lane B (web app, Sushma)** owns tasks **6–9** and leads integration task **10**. Task **11** is release and is human-gated.
+- Say **"start development"** in Kiro. The protocol in `.kiro/steering/parallel-development.md` picks your lane and the next ready task.
+- A sub-task is **ready** when every task in its `Depends on:` line is checked `[x]`. Parent rows (1, 2, 3, …) are never worked on directly. Check a parent when all its required sub-tasks are checked.
+- `- [ ]*` marks an **optional** task. Do it only when the person asks, or when none of the lane's required tasks is ready.
+- Check only your own lane's boxes. Checkbox edits to `tasks.md` are always allowed and are not listed under `Files:`.
+- Never use the task runner's "run all tasks", because it would also execute the other lane's work.
+- `[human]` marks a step that needs a person. The agent prepares everything, then stops and asks.
+- `Files:` lists the paths a task may create or change. Ready tasks with non-overlapping `Files:` may run in parallel sub-agents.
+- **Lane A priority:** finish 1.1 → 2.1 → 1.2 → 1.3 first. That completes handoff H1 and unblocks Lane B.
+
+---
+
+## Lane A: Data pipeline
+
+- [ ] 1. Shared contracts (handoff H1)
+- [ ] 1.1 Write the JSON Schemas
+  - Create `proposal-package.schema.json` (manifest and proposal) and `context-scene.schema.json` exactly as specified in design sections 4.2–4.4. Use JSON Schema draft 2020-12.
+  - Encode invariant 1 (unknown height ⇔ null value) in the schema.
+  - The category enum and context layers must not include noise, air-dispersion, emissions, health, compliance, or utility-capacity layers.
+  - Depends on: none
+  - Files: `contracts/*.schema.json`, `contracts/README.md`, `contracts/CHANGELOG.md`
+  - Done when: both schemas pass the draft 2020-12 meta-schema check, and `CHANGELOG.md` has a dated `1.0.0` entry.
+  - _Requirements: 1.1, 1.2, 1.4, 2.2, 3.2, 8.1, 8.6_
+- [ ] 1.2 Create the synthetic fixture
+  - Hand-write `contracts/fixtures/synthetic-site/` with every case listed in design section 4.6. Add `contracts/fixtures/invalid/` with one file per rule the schema should reject.
+  - Depends on: 1.1
+  - Files: `contracts/fixtures/**`
+  - Done when: the valid fixture passes and every invalid fixture fails, as shown by 1.3.
+  - _Requirements: 1.4, 1.5, 3.5, 4.4_
+- [ ] 1.3 Contract check and shared check script
+  - Add `dcviz contract-check`, using the `jsonschema` version locked in `pipeline/uv.lock`. It validates `contracts/fixtures/synthetic-site/`, expects every file in `contracts/fixtures/invalid/` to fail, and validates every `data/published/**` package.
+  - Add `scripts/check-all.sh`. It runs the contract check and Lane A's `ruff` and `pytest` when `uv` is installed, and runs Lane B's `npm run lint` and `npm test` when `web/node_modules` exists. It prints which parts ran. It exits non-zero if any check fails or if no contract validation ran at all.
+  - Depends on: 1.2, 2.1
+  - Files: `scripts/check-all.sh`, `pipeline/src/dcviz_pipeline/contract_check.py`, `pipeline/tests/test_contract_check.py`
+  - Done when: `scripts/check-all.sh` passes with `uv` installed, and fails with a clear message when `uv` is temporarily hidden from `PATH` and `web/node_modules` is absent. Commit message ends with `H1 ready`.
+  - _Requirements: 1.4_
+
+- [ ] 2. Pipeline foundation
+- [ ] 2.1 Scaffold the Python pipeline
+  - `uv` project pinned to Python 3.12 (`.python-version`, `requires-python = ">=3.12,<3.13"`) with the dependencies in design section 5. `dcviz` CLI entry point with stub subcommands, `ruff` config, and a `pytest` smoke test.
+  - Depends on: none
+  - Files: `pipeline/pyproject.toml`, `pipeline/uv.lock`, `pipeline/.python-version`, `pipeline/src/dcviz_pipeline/__init__.py`, `pipeline/src/dcviz_pipeline/cli.py`, `pipeline/tests/test_smoke.py`
+  - Done when: `uv sync --project pipeline`, `uv run --project pipeline ruff check`, and `uv run --project pipeline pytest` pass.
+  - _Requirements: 11.5_
+- [ ] 2.2 Source manifest and `fetch`
+  - Write `data/sources.yaml` for the pilot sources in design section 5.1. Verify each URL, issuer, license, coverage of the 1.2 km area, and `distributable` flag. Anything that can't be confirmed gets `status: unverified`.
+  - Implement `dcviz fetch` with caching, sha256 recording, and `data/raw/fetch-log.json`.
+  - Depends on: 2.1
+  - Files: `data/sources.yaml`, `pipeline/src/dcviz_pipeline/fetch.py`, `pipeline/tests/test_fetch.py`
+  - Done when: a clean `dcviz fetch` downloads every reachable source, and the tests (mocked HTTP) pass.
+  - _Requirements: 1.5, 8.2, 8.3_
+- [ ] 2.3 Coordinate utilities and package I/O
+  - EPSG:26986 ↔ local frame (design section 3), 0.1 m rounding, and reading and writing package files with schema validation.
+  - Hypothesis property tests: State Plane ↔ local round trip within 1 mm; rounding moves no point more than 0.05 m.
+  - Depends on: 1.1, 2.1
+  - Files: `pipeline/src/dcviz_pipeline/frame.py`, `pipeline/src/dcviz_pipeline/package_io.py`, `pipeline/tests/test_frame.py`
+  - Done when: the tests pass.
+  - _Requirements: 2.1, 2.5_
+
+- [ ] 3. Lowell neighborhood context (handoff H2)
+- [ ] 3.1 Context buildings
+  - Load MassGIS building footprints for Lowell (verify the town ID), clip to 1200 m around the origin, simplify (0.3 m), and drop footprints under 8 m². Keep only an id and the geometry.
+  - Depends on: 2.2, 2.3
+  - Files: `pipeline/src/dcviz_pipeline/context/buildings.py`, `pipeline/tests/context/test_buildings.py`
+  - Done when: the footprint count and bounding box are reported, and the tests pass on a small clipped sample.
+  - _Requirements: 1.6, 3.7, 3.10, 12.6_
+- [ ] 3.2 Building heights
+  - Measure OSM and Overture height coverage for the 1.2 km area. Implement the priority chain from design section 5.2. Record coverage per `heightSource` in `pipeline/docs/height-sources.md`.
+  - `[human]` Confirm the height approach and its license before 3.6 publishes.
+  - Depends on: 3.1
+  - Files: `pipeline/src/dcviz_pipeline/context/heights.py`, `pipeline/docs/height-sources.md`, `pipeline/tests/context/test_heights.py`
+  - Done when: every building has `heightM`, `heightStatus`, and `heightSource`, and the coverage numbers are recorded.
+  - _Requirements: 3.3, 3.4, 3.11_
+- [ ] 3.3 Roads, rail, water, and open space
+  - Clip each layer to the radius. Assign road widths by class. Set `publicAccess` on open space.
+  - Depends on: 2.2, 2.3
+  - Files: `pipeline/src/dcviz_pipeline/context/layers.py`, `pipeline/tests/context/test_layers.py`
+  - Done when: every layer is non-empty for Lowell, and River Meadow Brook, Oliveira Park, and the rail corridor are present (by name or location).
+  - _Requirements: 3.7, 5.2_
+- [ ] 3.4 Context writer
+  - `dcviz context` assembles 3.1–3.3 on the flat datum (design section 3) into `pipeline/build/context.json`, validates it, and reports its size (target under 6 MB).
+  - Depends on: 3.2, 3.3
+  - Files: `pipeline/src/dcviz_pipeline/context/__init__.py`, `pipeline/src/dcviz_pipeline/cli.py`
+  - Done when: `dcviz context` writes a schema-valid file.
+  - _Requirements: 3.7, 11.2_
+- [ ]* 3.5 Context property tests
+  - Hypothesis: generated footprints stay valid after clipping and simplification; no output key matches the PII blocklist; all coordinates stay inside the radius.
+  - Depends on: 3.4
+  - Files: `pipeline/tests/context/test_properties.py`, `pipeline/docs/property-test-findings.md`
+  - Done when: the tests pass, and any defect they found that the example tests missed is recorded.
+  - _Requirements: 1.6, 3.6_
+- [ ] 3.6 Publish context-only package `lowell-markley/0.1.0`
+  - Manifest with origin, datum, sources, attribution, three curated viewpoints (`pipeline/curation/lowell-markley/viewpoints.yaml`), and an empty `proposal.json` features list.
+  - `[human]` Review the source licenses and approve publication.
+  - Depends on: 1.3, 3.4
+  - Files: `data/published/lowell-markley/0.1.0/**`, `pipeline/curation/lowell-markley/viewpoints.yaml`, `pipeline/src/dcviz_pipeline/package.py`
+  - Done when: `scripts/check-all.sh` passes. Commit message ends with `H2 ready`.
+  - _Requirements: 1.1, 1.5, 5.1_
+- [ ]* 3.7 LiDAR-derived heights
+  - Derive heights from a LiDAR nDSM where available and mark them `derived`. Publish as a new package version.
+  - Depends on: 3.6
+  - Files: `pipeline/src/dcviz_pipeline/context/lidar.py`, `pipeline/docs/height-sources.md`
+  - Done when: coverage and the before/after height differences are recorded.
+  - _Requirements: 3.3, 3.4_
+
+- [ ] 4. Proposal georeferencing and curation
+- [ ] 4.1 Proposal-version research
+  - `[human]` Determine whether the August 2024 SPR plan set matches the April–July 2025 MassDEP application and approval NE-25-002. Decide which records belong to the `lowell-markley` 2024 package. Record findings and sources in `pipeline/docs/proposal-versions.md`.
+  - Depends on: 2.2
+  - Files: `pipeline/docs/proposal-versions.md`
+  - Done when: the findings are written, or the item is explicitly marked unresolved with the 2024 plan set as the only source in scope.
+  - _Requirements: 12.3, 12.4_
+- [ ]* 4.2 Plan vector extraction helper
+  - Timeboxed. `dcviz extract-plan` uses `pdfplumber` to export a sheet's linework as GeoJSON in plan feet using the scale bar. Run on C-100. If the output is not usable within the timebox, record that and continue with manual measurement.
+  - Depends on: 2.1
+  - Files: `pipeline/src/dcviz_pipeline/plan/extract.py`, `pipeline/tests/plan/test_extract.py`
+  - Done when: an overlay image shows the extracted linework against the sheet. A person reviews it.
+  - _Requirements: 2.5_
+- [ ] 4.3 Control points and similarity fit
+  - `dcviz georef`: least-squares similarity fit, residuals per point, check-point RMSE, and the `approximate` rule from design section 4.2. No affine fallback.
+  - `[human]` Choose at least 6 control points and 2 check points (parcel corners and street intersections) and record them in `control-points.yaml`.
+  - Hypothesis: the fit recovers known similarity transforms within 1 mm, and RMSE is never negative.
+  - Depends on: 2.3
+  - Files: `pipeline/src/dcviz_pipeline/plan/georef.py`, `pipeline/curation/lowell-markley/control-points.yaml`, `pipeline/tests/plan/test_georef.py`
+  - Done when: the tests pass and the Lowell RMSE is reported.
+  - _Requirements: 2.1, 2.2, 2.3, 2.4_
+- [ ] 4.4 Curate proposal features
+  - `features.yaml` for the pilot, limited to the records 4.1 put in scope: proposed generators and pads, existing generators that remain, cooling towers, the transformer yard, retaining walls, barrier gates and fences, the water treatment building, and existing Building #1. Record each one's state, plan vertices, plan-dimension annotations, and source refs.
+  - Search the DEP air-quality files and the Generator Yard Sketch for stack and equipment heights, and use them as `official` with sheet and page refs. Otherwise use `estimated` with a method, or `unknown`. Record the evidence in `height-evidence.md`.
+  - `[human]` Review states and heights against the sheets.
+  - Depends on: 4.1, 4.3
+  - Files: `pipeline/curation/lowell-markley/features.yaml`, `pipeline/curation/lowell-markley/height-evidence.md`
+  - Done when: every feature has a state, a geometry, and a confidence status for position, footprint, and height.
+  - _Requirements: 3.2, 3.3, 3.4, 3.5, 12.2_
+- [ ] 4.5 Dimension and discrepancy checks
+  - Check every `official` footprint dimension against the transformed geometry (0.5 m tolerance). Compare features with parcel boundaries and write `reviewIssues` for conflicts without moving any feature.
+  - Hypothesis: plan dimensions survive any similarity transform within 0.5 m.
+  - Depends on: 4.4
+  - Files: `pipeline/src/dcviz_pipeline/plan/checks.py`, `pipeline/tests/plan/test_checks.py`
+  - Done when: the check report is generated and the tests pass.
+  - _Requirements: 2.5, 2.6_
+
+- [ ] 5. Proposal package (handoff H3)
+- [ ] 5.1 Assemble the full package
+  - Extend `dcviz package`: context, curated features in the local frame, sources, claims, at least 3 ground viewpoints with `publicAccess: true`, the georeference block, and review issues.
+  - `dcviz package` refuses to write into a version directory that already exists, so any revised value needs a new version.
+  - Depends on: 3.6, 4.5
+  - Files: `pipeline/src/dcviz_pipeline/package.py`, `pipeline/tests/test_package.py`
+  - Done when: the generated package is schema-valid, and a test shows that overwriting an existing version fails.
+  - _Requirements: 1.1, 1.2, 1.3, 4.6, 5.1, 8.5_
+- [ ] 5.2 Package invariant validator
+  - `dcviz validate` checks invariants 1–7 (design section 4.3) and that no non-distributable source file was copied into the output.
+  - Hypothesis: a generated package that breaks any single invariant is rejected with a message naming that invariant.
+  - Depends on: 5.1
+  - Files: `pipeline/src/dcviz_pipeline/validate.py`, `pipeline/tests/test_validate.py`, `scripts/check-all.sh`
+  - Done when: the tests pass, the fixture and 0.1.0 still pass, and `check-all.sh` also runs `validate` on every published package.
+  - _Requirements: 1.4, 1.6, 4.4, 8.3, 12.6_
+- [ ] 5.3 Publish `lowell-markley/0.2.0`
+  - `[human]` Complete the pilot review checklist (each feature against its sheet) and record the reviewer and date in `manifest.review`.
+  - Depends on: 5.2
+  - Files: `data/published/lowell-markley/0.2.0/**`, `pipeline/curation/lowell-markley/review-checklist.md`
+  - Done when: `scripts/check-all.sh` passes. Commit message ends with `H3 ready`.
+  - _Requirements: 12.1, 12.5_
+
+---
+
+## Lane B: Web app
+
+- [ ] 6. Web foundation and render core
+- [ ] 6.1 Scaffold the web app
+  - Vite, strict TypeScript, ESLint, Prettier, vitest, and Playwright (Chromium and WebKit). Scripts: `dev`, `build`, `preview`, `lint`, `test`, `test:e2e`.
+  - Add `web/scripts/sync-data.mjs` (design section 6.1), run before `dev`, `build`, and `test:e2e`. It must work when `data/published/` is empty.
+  - Configure Playwright to run against `vite preview` of the production build.
+  - Depends on: none
+  - Files: `web/package.json`, `web/package-lock.json`, `web/vite.config.ts`, `web/tsconfig.json`, `web/index.html`, `web/src/main.ts`, `web/eslint.config.js`, `web/.prettierrc`, `web/playwright.config.ts`, `web/scripts/sync-data.mjs`, `web/tests/smoke.test.ts`, `web/e2e/smoke.spec.ts`
+  - Done when: `npm ci`, `npm run lint`, `npm test`, `npm run build`, and the smoke e2e test pass.
+  - _Requirements: 11.5_
+- [ ] 6.2 Render core with the stylized look
+  - Renderer, lights, ground plane, anti-aliasing, the style tokens from design section 6.3, and orbit controls with tilt, pan, zoom, a minimum height, and a minimum distance. Demonstrate them on procedural boxes until real data arrives.
+  - Depends on: 6.1
+  - Files: `web/src/scene/renderer.ts`, `web/src/scene/style.ts`, `web/src/camera/orbit.ts`, `web/tests/scene/style.test.ts`
+  - Done when: the demo looks like an elevated city-model overview (prepare a screenshot for the person to compare with the reference style), and the style-token contrast tests pass.
+  - _Requirements: 3.8, 3.9, 9.7_
+- [ ] 6.3 Package loader with validation
+  - Fetch the manifest, proposal, and context. Validate them with ajv against `contracts/*.schema.json` (imported at build time). Expose typed models and loading-progress events. Tests validate the synthetic fixture, reject every file in `contracts/fixtures/invalid/`, and validate every package under `data/published/`.
+  - Depends on: 1.3, 6.1
+  - Files: `web/src/data/loader.ts`, `web/src/data/types.ts`, `web/tests/data/loader.test.ts`
+  - Done when: the tests pass, with field-level error messages for invalid input.
+  - _Requirements: 1.1, 1.4, 10.1_
+- [ ] 6.4 Frame conversion
+  - Local ↔ Three.js and local ↔ lat/lon with `proj4` and `manifest.origin.proj4`.
+  - fast-check: the lat/lon round trip stays within 1 cm.
+  - Depends on: 6.3
+  - Files: `web/src/data/frame.ts`, `web/tests/data/frame.test.ts`
+  - Done when: the tests pass.
+  - _Requirements: 2.1, 5.3_
+
+- [ ] 7. Scene building and comparison
+- [ ] 7.1 Geometry builders
+  - Extrude polygons, and lines with `widthM`. Merge context buildings without changing any vertex height, and store a per-vertex `featureId`. Instance repeated equipment.
+  - fast-check: extruded volume equals footprint area × height within 0.1 %; merged geometry preserves each building's height exactly.
+  - Depends on: 6.2, 6.4
+  - Files: `web/src/scene/builders.ts`, `web/tests/scene/builders.test.ts`
+  - Done when: the tests pass and the fixture renders in fewer than 50 draw calls.
+  - _Requirements: 3.1, 3.10, 11.4_
+- [ ] 7.2 Context layers
+  - Buildings, roads, rail, water, and open space in the reference style. Legend note for the flat ground.
+  - Depends on: 7.1
+  - Files: `web/src/scene/context.ts`
+  - Done when: every fixture layer renders. Prepare a screenshot for the person to review.
+  - _Requirements: 3.7, 3.8, 3.11_
+- [ ] 7.3 Proposal features with confidence treatments
+  - Every treatment in the design section 6.3 table, for both detail levels, plus the approximate-placement banner.
+  - Depends on: 7.1
+  - Files: `web/src/scene/proposal.ts`, `web/src/scene/textures.ts`, `web/src/ui/banner.ts`
+  - Done when: in a grayscale screenshot, every state and status in the fixture is distinguishable at both detail levels.
+  - _Requirements: 2.4, 3.3, 3.4, 3.5, 3.6, 3.12, 8.4_
+- [ ] 7.4 Comparison modes
+  - Current, proposed, and split from one scene using layer masks and scissor rendering. The app state and URL-hash serialization from design section 6.4.
+  - Depends on: 7.2, 7.3
+  - Files: `web/src/compare/**`, `web/src/state.ts`
+  - Done when: the 7.6 tests pass and memory use in split mode stays within 10 % of single mode.
+  - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.6_
+- [ ] 7.5 Category visibility controls
+  - Native checkbox group per category, announced in the live region.
+  - Depends on: 7.4
+  - Files: `web/src/ui/categories.ts`
+  - Done when: each checkbox shows and hides only its own category.
+  - _Requirements: 4.5, 9.2_
+- [ ] 7.6 Scene property tests
+  - fast-check: membership sets satisfy invariant 4 for generated packages; no feature id renders twice; a mode change leaves the camera, date, and time identical.
+  - Depends on: 7.4
+  - Files: `web/tests/compare/properties.test.ts`, `web/docs/property-test-findings.md`
+  - Done when: the tests pass, and any defect they found is recorded.
+  - _Requirements: 4.3, 4.4_
+
+- [ ] 8. Viewpoints, shadows, and inspection
+- [ ] 8.1 Viewpoints
+  - Aerial overview plus the manifest viewpoints. Ground viewpoints are fixed 1.6 m eye positions with look-around (yaw and pitch) only. Instant cuts under reduced motion.
+  - Depends on: 7.2
+  - Files: `web/src/camera/viewpoints.ts`, `web/tests/camera/viewpoints.test.ts`
+  - Done when: every viewpoint loads at its position and target, and no camera state can be below ground or inside a footprint (unit test).
+  - _Requirements: 5.1, 5.6, 9.4_
+- [ ] 8.2 Place a viewpoint on public ground
+  - The user can place a ground viewpoint only on the layers listed in `manifest.publicViewingAreas` (road corridors and open space with `publicAccess: true`), inside the radius, and outside every footprint. Other points get an explanation.
+  - Depends on: 8.1
+  - Files: `web/src/camera/place.ts`, `web/tests/camera/place.test.ts`
+  - Done when: tests cover valid, private, out-of-radius, and inside-footprint points.
+  - _Requirements: 5.2_
+- [ ] 8.3 Address lookup adapter
+  - Geocoder interface with a `none` provider (the default) and a mock for tests. Do not add a real provider.
+  - Depends on: 6.4
+  - Files: `web/src/lookup/**`, `web/tests/lookup/*.test.ts`
+  - Done when: with `none` the UI explains that lookup is unavailable and viewpoints still work; with the mock a result places the camera; the query never reaches state, the URL, or an export.
+  - _Requirements: 5.3, 5.4, 5.5, 10.3_
+- [ ] 8.4 Sun position and shadows
+  - Convert the selected Lowell wall-clock time with `America/New_York` rules, then run suncalc. Shadows from site features and nearby context. Estimated-shadow labeling, no shadow for unknown heights, and an explanation when shadows are disabled.
+  - Depends on: 7.3
+  - Files: `web/src/sun/**`, `web/tests/sun/*.test.ts`
+  - Done when: the sun position matches reference values for Lowell within 0.5° at three times, including both DST transition days.
+  - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
+- [ ] 8.5 Inspect panel
+  - Raycast by `featureId`. Shows label, state, the status of position, footprint, and height, the method, sources (linked when public, cited otherwise), and the kind of any related claim.
+  - Depends on: 7.3
+  - Files: `web/src/inspect/**`
+  - Done when: every fixture feature shows complete provenance.
+  - _Requirements: 8.1, 8.2, 8.3, 8.5_
+
+- [ ] 9. Output, accessibility, and resilience
+- [ ] 9.1 PNG export
+  - Implement design section 6.6. Video and animation export are out of scope for this task.
+  - Depends on: 7.4, 8.1
+  - Files: `web/src/export/**`, `web/e2e/export.spec.ts`
+  - Done when: an e2e test on the production build downloads a PNG whose overlay text matches the app state, and a simulated context loss shows the retry message.
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
+- [ ] 9.2 Accessible inventory and keyboard path
+  - Inventory table, the keyboard bindings in design section 7, focus styles, live region, and the 320 px layout.
+  - Depends on: 7.5, 8.5
+  - Files: `web/src/inventory/**`, `web/src/ui/layout.ts`, `web/src/ui/keyboard.ts`, `web/e2e/a11y.spec.ts`
+  - Done when: the full workflow works keyboard-only in e2e, and axe reports no serious or critical issues.
+  - _Requirements: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7_
+- [ ] 9.3 Loading, error, and fallback states
+  - Progress, context-missing fallback, the no-WebGL fallback using a fixture image produced with 9.1's export, and distinct loading, unavailable, unknown, and estimated states.
+  - The MVP loads no detailed `.glb` assets, so Requirement 10.4 has no trigger. Note this in `fallback.ts` so a future asset loader falls back to extruded geometry.
+  - Depends on: 6.3, 9.1, 9.2
+  - Files: `web/src/ui/status.ts`, `web/src/ui/fallback.ts`, `web/public/fallback/synthetic-site.png`, `web/e2e/fallbacks.spec.ts`
+  - Done when: e2e covers each failure by blocking requests or disabling WebGL.
+  - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5, 10.6_
+- [ ] 9.4 Reduced detail and performance trace
+  - Detail toggle that keeps outlines and markers, plus a load-time and FPS trace for the acceptance tests.
+  - Depends on: 7.4
+  - Files: `web/src/perf/**`
+  - Done when: the trace runs for 30 s and reports the median FPS and time to first interactive scene.
+  - _Requirements: 11.3, 11.6_
+
+---
+
+## Integration (Lane B leads; Lane A supports)
+
+- [ ] 10. Lowell pilot integration
+- [ ] 10.1 Real neighborhood
+  - Load `lowell-markley/0.1.0` and tune the style for Lowell's low-rise density without adding features that don't exist.
+  - `[human]` Compare the scene with the local reference captures in `captures/data-center-review/`.
+  - Depends on: 3.6, 7.2
+  - Files: `web/src/config.ts`, `web/src/scene/style.ts`
+  - Done when: the person approves the look.
+  - _Requirements: 3.7, 3.8, 3.11_
+- [ ] 10.2 Full proposal
+  - Switch the default to `lowell-markley/0.2.0`. Run the whole e2e suite on the production build against it.
+  - Depends on: 5.3, 9.1, 9.3
+  - Files: `web/src/config.ts`
+  - Done when: the e2e suite passes on 0.2.0 through `vite preview`.
+  - _Requirements: 12.1, 12.2_
+- [ ] 10.3 Performance acceptance
+  - `[human]` Choose and document one desktop and one mobile device in `docs/test-devices.md`. Run the trace on each.
+  - Depends on: 9.4, 10.2
+  - Files: `docs/test-devices.md`, `docs/performance-results.md`
+  - Done when: both devices reach the first interactive scene within 5 s and keep a median of at least 30 FPS. If not, tune with reduced detail and re-run; the task stays open until both targets are met.
+  - _Requirements: 11.1, 11.2, 11.3_
+- [ ] 10.4 Lowell fallback image
+  - Generate `web/public/fallback/lowell-markley.png` with the export from a curated viewpoint in proposed mode, attribution included.
+  - Depends on: 10.2
+  - Files: `web/public/fallback/lowell-markley.png`
+  - Done when: the no-WebGL e2e test shows it for the Lowell package.
+  - _Requirements: 10.5_
+
+## Release (human-gated)
+
+- [ ] 11. Submission readiness
+- [ ] 11.1 Attribution and licenses
+  - `[human]` Write `ATTRIBUTION.md` and `LICENSE` from `data/sources.yaml` and the dependency licenses. Confirm that no non-distributable material is published.
+  - Depends on: 10.2
+  - Files: `ATTRIBUTION.md`, `LICENSE`
+  - _Requirements: 8.3, 8.7_
+- [ ] 11.2 Clean-clone verification
+  - Follow the README from a fresh clone on a second machine and fix any step that fails.
+  - Depends on: 10.3, 10.4, 11.1
+  - Files: `README.md`
+  - _Requirements: 11.5_
+- [ ] 11.3 Deployment, video, and submission
+  - `[human]` Choose a free static host and deploy. Record the demo video (under 3 minutes). Complete the Hackachusetts form. Record the submitted commit hash, package version, and deployment URL in `docs/submission.md`.
+  - Depends on: 11.2
+  - Files: `docs/submission.md`
