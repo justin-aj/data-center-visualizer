@@ -241,7 +241,7 @@ How to use this file:
   - _Requirements: 4.3, 4.4_
 
 - [ ] 8. Viewpoints, shadows, and inspection
-- [ ] 8.1 Viewpoints
+- [x] 8.1 Viewpoints
   - Aerial overview plus the manifest viewpoints. Ground viewpoints are fixed 1.6 m eye positions with look-around (yaw and pitch) only. Instant cuts under reduced motion.
   - Depends on: 7.2
   - Files: `web/src/camera/viewpoints.ts`, `web/tests/camera/viewpoints.test.ts`
