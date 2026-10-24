@@ -221,7 +221,7 @@ How to use this file:
   - Files: `web/src/scene/proposal.ts`, `web/src/scene/textures.ts`, `web/src/ui/banner.ts`
   - Done when: in a grayscale screenshot, every state and status in the fixture is distinguishable at both detail levels.
   - _Requirements: 2.4, 3.3, 3.4, 3.5, 3.6, 3.12, 8.4_
-- [ ] 7.4 Comparison modes
+- [x] 7.4 Comparison modes
   - Current, proposed, and split from one scene using layer masks and scissor rendering. The app state and URL-hash serialization from design section 6.4.
   - Depends on: 7.2, 7.3
   - Files: `web/src/compare/**`, `web/src/state.ts`
