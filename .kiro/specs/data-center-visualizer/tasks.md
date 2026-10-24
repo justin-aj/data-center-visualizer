@@ -64,7 +64,7 @@ How to use this file:
   - _Requirements: 2.1, 2.5_
 
 - [ ] 3. Lowell neighborhood context (handoff H2)
-- [ ] 3.1 Context buildings
+- [x] 3.1 Context buildings
   - Load MassGIS building footprints for Lowell (verify the town ID), clip to 1200 m around the origin, simplify (0.3 m), and drop footprints under 8 m². Keep only an id and the geometry.
   - Depends on: 2.2, 2.3
   - Files: `pipeline/src/dcviz_pipeline/context/buildings.py`, `pipeline/tests/context/test_buildings.py`
