@@ -172,7 +172,7 @@ How to use this file:
 
 ## Lane B: Web app
 
-- [ ] 6. Web foundation and render core
+- [x] 6. Web foundation and render core
 - [x] 6.1 Scaffold the web app
   - Vite, strict TypeScript, ESLint, Prettier, vitest, and Playwright (Chromium and WebKit). Scripts: `dev`, `build`, `preview`, `lint`, `test`, `test:e2e`.
   - Add `web/scripts/sync-data.mjs` (design section 6.1), run before `dev`, `build`, and `test:e2e`. It must work when `data/published/` is empty.
@@ -193,7 +193,7 @@ How to use this file:
   - Files: `web/src/data/loader.ts`, `web/src/data/types.ts`, `web/tests/data/loader.test.ts`
   - Done when: the tests pass, with field-level error messages for invalid input.
   - _Requirements: 1.1, 1.4, 10.1_
-- [ ] 6.4 Frame conversion
+- [x] 6.4 Frame conversion
   - Local ↔ Three.js and local ↔ lat/lon with `proj4` and `manifest.origin.proj4`.
   - fast-check: the lat/lon round trip stays within 1 cm.
   - Depends on: 6.3
