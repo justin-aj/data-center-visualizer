@@ -1,0 +1,470 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lotlens.org/contracts/proposal-package.schema.json",
+  "title": "Data Center Visualizer proposal package document",
+  "description": "Validates either manifest.json or proposal.json from a proposal package.",
+  "oneOf": [
+    { "$ref": "#/$defs/manifest" },
+    { "$ref": "#/$defs/proposal" }
+  ],
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "sourceRefList": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "uniqueItems": true
+    },
+    "position3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "position2": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "items": false
+    },
+    "lineStringGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "LineString" },
+        "coordinates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/position2" },
+          "minItems": 2
+        }
+      }
+    },
+    "linearRing": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/position2" },
+      "minItems": 4
+    },
+    "polygonGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "Polygon" },
+        "coordinates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/linearRing" },
+          "minItems": 1
+        }
+      }
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lon", "lat", "epsg", "easting", "northing", "proj4"],
+      "properties": {
+        "lon": { "type": "number", "minimum": -180, "maximum": 180 },
+        "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+        "epsg": { "const": 26986 },
+        "easting": { "type": "number" },
+        "northing": { "type": "number" },
+        "proj4": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "datum": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "siteGradeNavd88M", "note"],
+      "properties": {
+        "kind": { "const": "flat" },
+        "siteGradeNavd88M": { "type": ["number", "null"] },
+        "note": { "type": "string" }
+      }
+    },
+    "controlPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "planX",
+        "planY",
+        "easting",
+        "northing",
+        "description",
+        "residualM"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "role": { "enum": ["control", "check"] },
+        "planX": { "type": "number" },
+        "planY": { "type": "number" },
+        "easting": { "type": "number" },
+        "northing": { "type": "number" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "residualM": { "type": "number", "minimum": 0 }
+      }
+    },
+    "georeference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceSheet",
+        "planUnits",
+        "planScale",
+        "method",
+        "parameters",
+        "controlPoints",
+        "rmseM",
+        "checkPointCount",
+        "approximate",
+        "verticalDatum",
+        "reviewedBy",
+        "reviewedAt"
+      ],
+      "properties": {
+        "sourceSheet": { "$ref": "#/$defs/nonEmptyString" },
+        "planUnits": { "$ref": "#/$defs/nonEmptyString" },
+        "planScale": { "$ref": "#/$defs/nonEmptyString" },
+        "method": { "const": "similarity-least-squares" },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scale", "rotationDeg", "translateE", "translateN"],
+          "properties": {
+            "scale": { "type": "number", "exclusiveMinimum": 0 },
+            "rotationDeg": { "type": "number" },
+            "translateE": { "type": "number" },
+            "translateN": { "type": "number" }
+          }
+        },
+        "controlPoints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/controlPoint" },
+          "minItems": 1
+        },
+        "rmseM": { "type": "number", "minimum": 0 },
+        "checkPointCount": { "type": "integer", "minimum": 0 },
+        "approximate": { "type": "boolean" },
+        "verticalDatum": { "enum": ["NAVD88", null] },
+        "reviewedBy": { "$ref": "#/$defs/nonEmptyString" },
+        "reviewedAt": { "$ref": "#/$defs/date" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["rmseM"],
+            "properties": { "rmseM": { "exclusiveMinimum": 2 } }
+          },
+          "then": { "properties": { "approximate": { "const": true } } }
+        },
+        {
+          "if": {
+            "required": ["checkPointCount"],
+            "properties": { "checkPointCount": { "maximum": 1 } }
+          },
+          "then": { "properties": { "approximate": { "const": true } } }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "issuer",
+        "date",
+        "sheetOrPage",
+        "url",
+        "retrievedAt",
+        "license",
+        "distributable"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "issuer": { "$ref": "#/$defs/nonEmptyString" },
+        "date": { "$ref": "#/$defs/date" },
+        "sheetOrPage": { "$ref": "#/$defs/nonEmptyString" },
+        "url": { "type": "string", "format": "uri" },
+        "retrievedAt": { "$ref": "#/$defs/date" },
+        "license": { "$ref": "#/$defs/nonEmptyString" },
+        "distributable": { "type": "boolean" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "text", "sourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": {
+          "enum": ["applicant", "government_finding", "allegation", "estimate"]
+        },
+        "text": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceRefs": { "$ref": "#/$defs/sourceRefList" }
+      }
+    },
+    "viewpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "kind", "position", "target", "publicAccess"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "kind": { "enum": ["aerial", "ground"] },
+        "position": { "$ref": "#/$defs/position3" },
+        "target": { "$ref": "#/$defs/position3" },
+        "publicAccess": { "type": "boolean" }
+      }
+    },
+    "reviewIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "severity", "description", "featureIds"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "severity": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "featureIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer", "date", "result", "checklistRef"],
+      "properties": {
+        "reviewer": { "$ref": "#/$defs/nonEmptyString" },
+        "date": { "$ref": "#/$defs/date" },
+        "result": { "$ref": "#/$defs/nonEmptyString" },
+        "checklistRef": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "projectId",
+        "packageVersion",
+        "title",
+        "siteAddress",
+        "baselineDate",
+        "proposalDate",
+        "verifiedAt",
+        "proposalVersionLabel",
+        "origin",
+        "datum",
+        "contextRadiusM",
+        "georeference",
+        "sources",
+        "claims",
+        "viewpoints",
+        "publicViewingAreas",
+        "reviewIssues",
+        "review",
+        "attribution",
+        "excludedFields"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "pattern": "^1\\.0\\.0$"
+        },
+        "projectId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "packageVersion": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$"
+        },
+        "title": { "$ref": "#/$defs/nonEmptyString" },
+        "siteAddress": { "$ref": "#/$defs/nonEmptyString" },
+        "baselineDate": { "$ref": "#/$defs/date" },
+        "proposalDate": { "$ref": "#/$defs/date" },
+        "verifiedAt": { "$ref": "#/$defs/date" },
+        "proposalVersionLabel": { "$ref": "#/$defs/nonEmptyString" },
+        "origin": { "$ref": "#/$defs/origin" },
+        "datum": { "$ref": "#/$defs/datum" },
+        "contextRadiusM": { "type": "number", "minimum": 1000 },
+        "georeference": { "$ref": "#/$defs/georeference" },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source" },
+          "minItems": 1
+        },
+        "claims": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/claim" }
+        },
+        "viewpoints": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/viewpoint" },
+          "minItems": 1
+        },
+        "publicViewingAreas": {
+          "type": "array",
+          "items": { "enum": ["roads", "openSpace"] },
+          "uniqueItems": true
+        },
+        "reviewIssues": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/reviewIssue" }
+        },
+        "review": { "$ref": "#/$defs/review" },
+        "attribution": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "excludedFields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "height": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valueM", "status", "method", "sourceRefs"],
+      "properties": {
+        "valueM": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "status": { "enum": ["official", "derived", "estimated", "unknown"] },
+        "method": { "type": ["string", "null"] },
+        "sourceRefs": { "$ref": "#/$defs/sourceRefList" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "valueM": { "type": "null" },
+            "status": { "const": "unknown" }
+          }
+        },
+        {
+          "properties": {
+            "valueM": { "type": "number", "exclusiveMinimum": 0 },
+            "status": { "enum": ["official", "derived", "estimated"] }
+          }
+        }
+      ]
+    },
+    "confidenceValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "sourceRefs", "note"],
+      "properties": {
+        "status": { "enum": ["official", "derived", "estimated", "unknown"] },
+        "sourceRefs": { "$ref": "#/$defs/sourceRefList" },
+        "note": { "type": "string" }
+      }
+    },
+    "proposalFeature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "state",
+        "replaces",
+        "label",
+        "geometry",
+        "widthM",
+        "baseElevationM",
+        "height",
+        "confidence",
+        "notes"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "category": {
+          "enum": [
+            "building",
+            "generator",
+            "cooling",
+            "electrical",
+            "retaining_wall",
+            "fence",
+            "paving",
+            "vegetation_screen",
+            "other"
+          ]
+        },
+        "state": { "enum": ["existing", "proposed", "removed", "modified"] },
+        "replaces": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" },
+          "uniqueItems": true
+        },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "geometry": {
+          "oneOf": [
+            { "$ref": "#/$defs/polygonGeometry" },
+            { "$ref": "#/$defs/lineStringGeometry" }
+          ]
+        },
+        "widthM": { "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "baseElevationM": { "type": "number" },
+        "height": { "$ref": "#/$defs/height" },
+        "confidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["position", "footprint"],
+          "properties": {
+            "position": { "$ref": "#/$defs/confidenceValue" },
+            "footprint": { "$ref": "#/$defs/confidenceValue" }
+          }
+        },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["category"],
+            "properties": {
+              "category": { "enum": ["retaining_wall", "fence"] }
+            }
+          },
+          "then": {
+            "properties": {
+              "geometry": { "$ref": "#/$defs/lineStringGeometry" },
+              "widthM": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          },
+          "else": {
+            "properties": {
+              "geometry": { "$ref": "#/$defs/polygonGeometry" },
+              "widthM": { "type": "null" }
+            }
+          }
+        }
+      ]
+    },
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["features"],
+      "properties": {
+        "features": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/proposalFeature" }
+        }
+      }
+    }
+  }
+}

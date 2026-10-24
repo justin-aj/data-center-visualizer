@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lotlens.org/contracts/context-scene.schema.json",
+  "title": "Data Center Visualizer context scene",
+  "description": "Validates context.json neighborhood layers for a proposal package.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ground", "buildings", "roads", "railways", "water", "openSpace"],
+  "properties": {
+    "ground": { "$ref": "#/$defs/ground" },
+    "buildings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/building" }
+    },
+    "roads": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/road" }
+    },
+    "railways": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/railway" }
+    },
+    "water": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/waterFeature" }
+    },
+    "openSpace": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/openSpaceFeature" }
+    }
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "position2": {
+      "type": "array",
+      "prefixItems": [
+        { "type": "number" },
+        { "type": "number" }
+      ],
+      "items": false
+    },
+    "lineStringGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "LineString" },
+        "coordinates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/position2" },
+          "minItems": 2
+        }
+      }
+    },
+    "linearRing": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/position2" },
+      "minItems": 4
+    },
+    "polygonGeometry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "coordinates"],
+      "properties": {
+        "type": { "const": "Polygon" },
+        "coordinates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/linearRing" },
+          "minItems": 1
+        }
+      }
+    },
+    "ground": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["elevationM"],
+      "properties": {
+        "elevationM": { "type": ["number", "null"] }
+      }
+    },
+    "building": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "geometry",
+        "baseElevationM",
+        "heightM",
+        "heightStatus",
+        "heightSource"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "geometry": { "$ref": "#/$defs/polygonGeometry" },
+        "baseElevationM": { "type": "number" },
+        "heightM": { "type": "number", "exclusiveMinimum": 0 },
+        "heightStatus": { "enum": ["derived", "estimated"] },
+        "heightSource": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "road": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["geometry", "class", "widthM"],
+      "properties": {
+        "geometry": { "$ref": "#/$defs/lineStringGeometry" },
+        "class": { "$ref": "#/$defs/nonEmptyString" },
+        "widthM": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "railway": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["geometry", "widthM"],
+      "properties": {
+        "geometry": { "$ref": "#/$defs/lineStringGeometry" },
+        "widthM": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "waterFeature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["geometry"],
+      "properties": {
+        "geometry": { "$ref": "#/$defs/polygonGeometry" },
+        "name": { "$ref": "#/$defs/nonEmptyString" }
+      }
+    },
+    "openSpaceFeature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["geometry", "kind", "publicAccess"],
+      "properties": {
+        "geometry": { "$ref": "#/$defs/polygonGeometry" },
+        "kind": { "enum": ["park", "field", "wooded", "other"] },
+        "publicAccess": { "type": "boolean" }
+      }
+    }
+  }
+}

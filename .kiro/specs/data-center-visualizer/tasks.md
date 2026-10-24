@@ -19,7 +19,7 @@ How to use this file:
 ## Lane A: Data pipeline
 
 - [ ] 1. Shared contracts (handoff H1)
-- [ ] 1.1 Write the JSON Schemas
+- [x] 1.1 Write the JSON Schemas
   - Create `proposal-package.schema.json` (manifest and proposal) and `context-scene.schema.json` exactly as specified in design sections 4.2–4.4. Use JSON Schema draft 2020-12.
   - Encode invariant 1 (unknown height ⇔ null value) in the schema.
   - The category enum and context layers must not include noise, air-dispersion, emissions, health, compliance, or utility-capacity layers.
