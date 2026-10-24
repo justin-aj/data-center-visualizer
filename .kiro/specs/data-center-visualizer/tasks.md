@@ -304,7 +304,7 @@ How to use this file:
 ## Integration (Lane B leads; Lane A supports)
 
 - [ ] 10. Lowell pilot integration
-- [ ] 10.1 Real neighborhood
+- [x] 10.1 Real neighborhood
   - Load `lowell-markley/0.1.0` and tune the style for Lowell's low-rise density without adding features that don't exist.
   - `[human]` Compare the scene with the local reference captures in `captures/data-center-review/`.
   - Depends on: 3.6, 7.2
