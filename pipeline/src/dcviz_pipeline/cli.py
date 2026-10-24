@@ -6,6 +6,7 @@ import argparse
 from collections.abc import Sequence
 
 from dcviz_pipeline.contract_check import run_contract_check
+from dcviz_pipeline.fetch import run_fetch
 
 COMMANDS = (
     "contract-check",
@@ -29,6 +30,11 @@ def _run_contract_check(_args: argparse.Namespace) -> int:
     return run_contract_check()
 
 
+def _run_fetch(_args: argparse.Namespace) -> int:
+    """Download and cache the configured source material."""
+    return run_fetch()
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the top-level command parser and its stub subcommands."""
     parser = argparse.ArgumentParser(
@@ -37,10 +43,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
+    handlers = {
+        "contract-check": _run_contract_check,
+        "fetch": _run_fetch,
+    }
     for command in COMMANDS:
         subparser = subparsers.add_parser(command)
-        handler = _run_contract_check if command == "contract-check" else _run_stub
-        subparser.set_defaults(handler=handler)
+        subparser.set_defaults(handler=handlers.get(command, _run_stub))
 
     return parser
 

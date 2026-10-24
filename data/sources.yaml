@@ -1,0 +1,257 @@
+# Source manifest for the Lowell pilot.
+# Verification reflects checks performed on 2026-10-24. Raw downloads stay in
+# data/raw/ (Git-ignored). A distributable=false source may be cited but must
+# never be copied into data/published/ or web/public/.
+
+sources:
+  - id: lowell-spr-plan-2024-08-09
+    title: 2 Prince Avenue and 1 Markley Way Plan Set
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/27449
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - August 9, 2024 working civil-plan geometry and dimensions
+    coverage: Site-specific plan set for 2 Prince Avenue and 1 Markley Way, inside the pilot area
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and site coverage verified; author rights and redistribution permission unresolved
+
+  - id: lowell-previous-plans-2024
+    title: 2 Prince Avenue and 1 Markley Way Previous Plans for Reference
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/27447
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Historical comparison only; do not merge with the August 2024 proposal without review
+    coverage: Site-specific records for 2 Prince Avenue and 1 Markley Way
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and site coverage verified; dates, version relationship, and redistribution permission unresolved
+
+  - id: lowell-main-application-2024
+    title: 2 Prince Avenue and 1 Markley Way Main Application
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/27450
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Proposal citation and application metadata after proposal-version review
+    coverage: Site-specific application for 2 Prince Avenue and 1 Markley Way
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and site coverage verified; author rights and redistribution permission unresolved
+
+  - id: lowell-generator-emissions-memo-2024
+    title: 2 Prince Avenue and 1 Markley Way Generator Emissions Memo
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/27451
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Possible equipment dimensions only after proposal-version review
+      - Not for emissions, exposure, health, or compliance visualization
+    coverage: Site-specific filing for 2 Prince Avenue and 1 Markley Way
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and site coverage verified; document authorship, version relationship, and redistribution permission unresolved
+
+  - id: lowell-dep-air-application-files-2024
+    title: Markley DEP Air Quality Application Files
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/28306
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Possible stack or equipment dimensions only after proposal-version review
+      - Not for air-dispersion, emissions, exposure, health, or compliance visualization
+    coverage: Site-specific filing associated with the Lowell project folder
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and project-folder association verified; relation to the August 2024 plan and redistribution permission unresolved
+
+  - id: lowell-dep-potential-to-emit-revised-2024
+    title: Markley DEP Potential to Emit Data REVISED
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/28307
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Possible stack or equipment dimensions only after proposal-version review
+      - Not for emissions, exposure, health, or compliance visualization
+    coverage: Site-specific filing associated with the Lowell project folder
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and project-folder association verified; relation to the August 2024 plan and redistribution permission unresolved
+
+  - id: lowell-dep-comments-response-2024
+    title: Air Quality Application DEP Comments and Markley Response
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/28308
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Possible equipment metadata only after proposal-version review
+      - Not for air-quality, exposure, health, or compliance visualization
+    coverage: Site-specific filing associated with the Lowell project folder
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and project-folder association verified; relation to the August 2024 plan and redistribution permission unresolved
+
+  - id: lowell-generator-yard-sketch-2024
+    title: 2 Prince Avenue Generator Yard Sketch
+    issuer: City of Lowell Department of Planning and Development (publisher)
+    url: https://www.lowellma.gov/DocumentCenter/View/28351
+    license: Publicly accessible municipal record; redistribution permission not verified
+    distributable: false
+    status: unverified
+    usedFor:
+      - Possible generator layout and dimensions after proposal-version review
+    coverage: Site-specific sketch associated with the Lowell project folder
+    verification:
+      checkedAt: 2026-10-24
+      urlEvidence: https://www.lowellma.gov/DocumentCenter/Index/3000
+      result: Download URL, publisher, and project-folder association verified; date, relation to the August 2024 plan, and redistribution permission unresolved
+
+  - id: massgis-buildings-lowell-160
+    title: MassGIS Building Structures (2-D), Lowell town ID 160
+    issuer: Bureau of Geographic Information (MassGIS), Commonwealth of Massachusetts EOTSS
+    url: https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/shapefiles/structures/structures_poly_160.zip
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Existing building roofprints in Lowell
+    coverage: Citywide Lowell archive; town ID 160; includes the full 1.2 km pilot radius
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-building-structures-2-d
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: URL, issuer, town ID, statewide coverage, and redistribution policy verified
+
+  - id: massgis-parcels-lowell-160
+    title: MassGIS Level 3 Property Tax Parcels, Lowell town ID 160
+    issuer: Bureau of Geographic Information (MassGIS), Commonwealth of Massachusetts EOTSS
+    url: https://s3.us-east-1.amazonaws.com/download.massgis.digital.mass.gov/shapefiles/l3parcels/L3_SHP_M160_LOWELL.zip
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Parcel anchor and georeferencing control points only
+      - Owner, address, assessor, and contact fields must be dropped at load
+    coverage: Citywide Lowell archive; town ID 160; includes the full 1.2 km pilot radius
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-property-tax-parcels
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: URL, issuer, town ID, citywide coverage, and redistribution policy verified; parcels are not survey boundaries
+
+  - id: osm-building-heights-pilot
+    title: OpenStreetMap buildings with height or building:levels tags near the Lowell pilot
+    issuer: OpenStreetMap contributors
+    url: "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A60%5D%3B%28way%5B%22building%22%5D%5B%22height%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Brelation%5B%22building%22%5D%5B%22height%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Bway%5B%22building%22%5D%5B%22building%3Alevels%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3Brelation%5B%22building%22%5D%5B%22building%3Alevels%22%5D%2842.6197%2C-71.3189%2C42.6413%2C-71.2896%29%3B%29%3Bout+tags+geom%3B"
+    license: Open Data Commons Open Database License 1.0; OpenStreetMap attribution and share-alike terms apply
+    distributable: true
+    status: verified
+    usedFor:
+      - Explicit building height and building-level tags
+    coverage: Bounding box enclosing the 1.2 km radius around the initial pilot anchor; 18 tagged buildings returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      licenseEvidence: https://www.openstreetmap.org/copyright
+      result: Query URL, issuer, license, bounding-box coverage, and current response verified
+
+  - id: massgis-roads-pilot
+    title: MassGIS-MassDOT Roads clipped to the Lowell pilot envelope
+    issuer: Massachusetts Department of Transportation and MassGIS
+    url: "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MassDOTRoads_gdb/FeatureServer/0/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CSTREETNAME%2CCLASS%2CRDTYPE%2CADMIN_TYPE%2CRT_NUMBER%2CSTREET_NAME%2CF_CLASS%2CNUM_LANES%2CROW_WIDTH&returnGeometry=true&outSR=26986&f=json"
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Road centerlines, classes, and width inputs
+    coverage: EPSG:26986 envelope enclosing the full 1.2 km pilot radius; 984 features returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-massgis-massdot-roads
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: Query URL, issuer, license, envelope coverage, and response count verified
+
+  - id: massgis-rail-pilot
+    title: MassGIS Trains layer clipped to the Lowell pilot envelope
+    issuer: Central Transportation Planning Staff and MassGIS
+    url: "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Trains_gdb/FeatureServer/0/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CTYPE%2CCOMMRAIL%2COWNERSHIP%2CFREIGHT_OP%2CPASS_OP%2CTRACK%2CYARD%2CRAIL_TRL%2CSPUR&returnGeometry=true&outSR=26986&f=json"
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Active, freight, spur, yard, and abandoned rail linework
+    coverage: EPSG:26986 envelope enclosing the full 1.2 km pilot radius; 82 features returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-trains
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: Query URL, issuer, license, envelope coverage, and response count verified
+
+  - id: massgis-water-lines-pilot
+    title: MassGIS USGS/MassDEP Hydrography linear features clipped to the Lowell pilot envelope
+    issuer: USGS, MassDEP, and MassGIS
+    url: "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Massachusetts_Water_Features/FeatureServer/7/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CNAME%2CARC_CODE%2CSARISNAME%2CSOURCE%2CRESOLUTION&returnGeometry=true&outSR=26986&f=json"
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - River and stream linework
+    coverage: EPSG:26986 envelope enclosing the full 1.2 km pilot radius; 33 features returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-massdep-hydrography-125000
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: Query URL, issuer, license, envelope coverage, and response count verified
+
+  - id: massgis-water-polygons-pilot
+    title: MassGIS USGS/MassDEP Hydrography water bodies clipped to the Lowell pilot envelope
+    issuer: USGS, MassDEP, and MassGIS
+    url: "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Massachusetts_Water_Features/FeatureServer/8/query?where=1%3D1&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CNAME%2CPOLY_CODE%2CSOURCE%2CRESOLUTION&returnGeometry=true&outSR=26986&f=json"
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Water-body polygons
+    coverage: EPSG:26986 envelope enclosing the full 1.2 km pilot radius; 15 features returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-massdep-hydrography-125000
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: Query URL, issuer, license, envelope coverage, and response count verified
+
+  - id: massgis-open-space-pilot
+    title: MassGIS Protected and Recreational Open Space clipped to the Lowell pilot envelope
+    issuer: Massachusetts Executive Office of Energy and Environmental Affairs and MassGIS
+    url: "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/openspace/FeatureServer/0/query?where=TOWN_ID%3D160&geometry=214858.5435%2C929922.2000%2C217258.5435%2C932322.2000&geometryType=esriGeometryEnvelope&inSR=26986&spatialRel=esriSpatialRelIntersects&outFields=OBJECTID%2CTOWN_ID%2CPOLY_ID%2CSITE_NAME%2CPRIM_PURP%2CPUB_ACCESS%2CLEV_PROT%2CALT_SITE_NAME%2CFORMAL_SITE_NAME%2COS_TYPE&returnGeometry=true&outSR=26986&f=json"
+    license: MassGIS public records; free redistribution and derivative use with requested source credit
+    distributable: true
+    status: verified
+    usedFor:
+      - Parks, fields, wooded areas, and public-access classification
+    coverage: Lowell town ID 160 within the EPSG:26986 envelope enclosing the full 1.2 km pilot radius; 55 features returned during verification
+    verification:
+      checkedAt: 2026-10-24
+      metadataEvidence: https://www.mass.gov/info-details/massgis-data-protected-and-recreational-openspace
+      licenseEvidence: https://www.mass.gov/info-details/learn-about-massgis-data
+      result: Query URL, issuer, license, envelope coverage, selected non-owner fields, and response count verified

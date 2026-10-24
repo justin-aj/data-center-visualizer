@@ -41,14 +41,14 @@ How to use this file:
   - Done when: `scripts/check-all.sh` passes with `uv` installed, and fails with a clear message when `uv` is temporarily hidden from `PATH` and `web/node_modules` is absent. Commit message ends with `H1 ready`.
   - _Requirements: 1.4_
 
-- [ ] 2. Pipeline foundation
+- [x] 2. Pipeline foundation
 - [x] 2.1 Scaffold the Python pipeline
   - `uv` project pinned to Python 3.12 (`.python-version`, `requires-python = ">=3.12,<3.13"`) with the dependencies in design section 5. `dcviz` CLI entry point with stub subcommands, `ruff` config, and a `pytest` smoke test.
   - Depends on: none
   - Files: `pipeline/pyproject.toml`, `pipeline/uv.lock`, `pipeline/.python-version`, `pipeline/src/dcviz_pipeline/__init__.py`, `pipeline/src/dcviz_pipeline/cli.py`, `pipeline/tests/test_smoke.py`
   - Done when: `uv sync --project pipeline`, `uv run --project pipeline ruff check`, and `uv run --project pipeline pytest` pass.
   - _Requirements: 11.5_
-- [ ] 2.2 Source manifest and `fetch`
+- [x] 2.2 Source manifest and `fetch`
   - Write `data/sources.yaml` for the pilot sources in design section 5.1. Verify each URL, issuer, license, coverage of the 1.2 km area, and `distributable` flag. Anything that can't be confirmed gets `status: unverified`.
   - Implement `dcviz fetch` with caching, sha256 recording, and `data/raw/fetch-log.json`.
   - Depends on: 2.1
